@@ -61,7 +61,7 @@ public class OrdemServicoModel extends BaseModel {
     private LocalDateTime dataConclusao;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "isVeiculo", nullable = false)
+    @JoinColumn(name = "idVeiculo", nullable = false)
     private VeiculoModel veiculo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

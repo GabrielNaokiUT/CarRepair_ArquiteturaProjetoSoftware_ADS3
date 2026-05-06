@@ -7,11 +7,14 @@ package br.edu.senai.fatesg.ads3.car_repair.business.clientes;
 import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.FieldValidationException;
 import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.RuleValidationException;
 import br.edu.senai.fatesg.ads3.car_repair.core.validations.GenericValidation;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Gabriel
  */
+
+@Component
 public class ClienteValidation extends GenericValidation<ClienteModel, IClienteRepository> implements IClienteValidation {
 
     @Override
