@@ -4,34 +4,29 @@
  */
 package br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos;
 
-import br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos.OrdemServicoModel.StatusOrdem;
 import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  *
  * @author Gabriel
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 
 public class OrdemServicoDTO extends BaseDTO{
 
-    private String numero;
+    private UUID idOrdemServico;
     private String descricaoProblema;
-    private String diagnostico;
-    private StatusOrdem status;
+    private OrdemServicoModel.StatusOrdemServico statusOrdemServico;
     private BigDecimal valorTotal;
-    private LocalDateTime dataAbertura;
-    private LocalDateTime dataConclusao;
+    private Date dataAbertura;
+    private Date dataConclusao;
+    private UUID idCliente;
     private UUID idVeiculo;
     private UUID idServico;
 }

@@ -4,13 +4,10 @@
  */
 package br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos;
 
-import br.edu.senai.fatesg.ads3.car_repair.business.servicos.IServicosRepository;
-import br.edu.senai.fatesg.ads3.car_repair.business.veiculos.IVeiculoRepository;
+import br.edu.senai.fatesg.ads3.car_repair.business.clientes.ClienteModel;
+import br.edu.senai.fatesg.ads3.car_repair.business.servicos.ServicoModel;
+import br.edu.senai.fatesg.ads3.car_repair.business.veiculos.VeiculoModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.GenericMapper;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,31 +18,29 @@ import org.springframework.stereotype.Component;
 
 public class OrdemServicoMapper extends GenericMapper<OrdemServicoModel, OrdemServicoDTO> implements IOrdemServicoMapper {
 
-    @Autowired
-    private IVeiculoRepository veiculoRepository;
-
-    @Autowired
-    private IServicosRepository servicoRepository;
-
     @Override
     public OrdemServicoDTO toDto(OrdemServicoModel entity) {
         if (entity == null) {
             return null;
         }
         OrdemServicoDTO dto = new OrdemServicoDTO();
-
-        BeanUtils.copyProperties(entity, dto);
-
+        
+        dto.setId(entity.getId());
         dto.setActive(entity.isAtivo());
-
+        dto.setDescricaoProblema(entity.getDescricaoProblema());
+        dto.setStatusOrdemServico(entity.getStatusOrdemServico());
+        dto.setValorTotal(entity.getValorTotal());
+        dto.setDataAbertura(entity.getDataAbertura());
+        dto.setDataConclusao(entity.getDataConclusao());
+        if (entity.getCliente() != null) {
+            dto.setIdCliente(entity.getCliente().getId());
+        }
         if (entity.getVeiculo() != null) {
             dto.setIdVeiculo(entity.getVeiculo().getId());
         }
-
         if (entity.getServico() != null) {
             dto.setIdServico(entity.getServico().getId());
         }
-
         return dto;
     }
 
@@ -56,27 +51,30 @@ public class OrdemServicoMapper extends GenericMapper<OrdemServicoModel, OrdemSe
         }
         OrdemServicoModel entity = new OrdemServicoModel();
 
-        BeanUtils.copyProperties(dto, entity);
-
-        // Mapeia o booleano e os relacionamentos
+        entity.setId(dto.getId());
         entity.setAtivo(dto.isActive());
-
-        // Mantém suas regras de valores padrão (Default values)
-        if (entity.getValorTotal() == null) {
-            entity.setValorTotal(BigDecimal.ZERO);
+        entity.setDescricaoProblema(dto.getDescricaoProblema());
+        if (dto.getStatusOrdemServico() != null) {
+            entity.setStatusOrdemServico(dto.getStatusOrdemServico());
         }
-        if (entity.getDataAbertura() == null) {
-            entity.setDataAbertura(LocalDateTime.now());
+        entity.setValorTotal(dto.getValorTotal());
+        entity.setDataAbertura(dto.getDataAbertura());
+        entity.setDataConclusao(dto.getDataConclusao());
+        if (dto.getIdCliente() != null) {
+            ClienteModel cliente = new ClienteModel();
+            cliente.setId(dto.getIdCliente());
+            entity.setCliente(cliente);
         }
-
         if (dto.getIdVeiculo() != null) {
-            entity.setVeiculo(veiculoRepository.getReferenceById(dto.getIdVeiculo()));
+            VeiculoModel veiculo = new VeiculoModel();
+            veiculo.setId(dto.getIdVeiculo());
+            entity.setVeiculo(veiculo);
         }
-
         if (dto.getIdServico() != null) {
-            entity.setServico(servicoRepository.getReferenceById(dto.getIdServico()));
+            ServicoModel servico = new ServicoModel();
+            servico.setId(dto.getIdServico());
+            entity.setServico(servico);
         }
-
         return entity;
     }
 

@@ -5,8 +5,6 @@
 package br.edu.senai.fatesg.ads3.car_repair.business.servicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.GenericMapper;
-import java.math.BigDecimal;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,10 +22,11 @@ public class ServicosMapper extends GenericMapper<ServicoModel, ServicosDTO> imp
         }
         ServicosDTO dto = new ServicosDTO();
 
-        BeanUtils.copyProperties(entity, dto);
-
+        dto.setId(entity.getId());
         dto.setActive(entity.isAtivo());
-
+        dto.setNome(entity.getNome());
+        dto.setDescricao(entity.getDescricao());
+        dto.setPreco(entity.getPreco());
         return dto;
     }
 
@@ -38,14 +37,11 @@ public class ServicosMapper extends GenericMapper<ServicoModel, ServicosDTO> imp
         }
         ServicoModel entity = new ServicoModel();
 
-        BeanUtils.copyProperties(dto, entity);
-
+        entity.setId(dto.getId());
         entity.setAtivo(dto.isActive());
-
-        if (dto.getPreco() == null) {
-            entity.setPreco(BigDecimal.ZERO);
-        }
-
+        entity.setNome(dto.getNome());
+        entity.setDescricao(dto.getDescricao());
+        entity.setPreco(dto.getPreco());
         return entity;
     }
 

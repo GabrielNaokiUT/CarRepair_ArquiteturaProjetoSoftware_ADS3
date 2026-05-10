@@ -44,21 +44,21 @@ public abstract class GenericController<
     }
 
     @GetMapping
-    public ResponseEntity findAll(Pageable pageable) {
+    public ResponseEntity<Page<D>> findAll(Pageable pageable) {
         Page<E> entities = service.findAllActive(pageable);
         Page<D> dtos = mapper.toDtoPage(entities);
         return ResponseEntity.ok(dtos);
     }
 
     @PostMapping
-    public ResponseEntity insert(@RequestBody D dto) {
+    public ResponseEntity<D> insert(@RequestBody D dto) {
         E entity = mapper.toEntity(dto);
         E saved = service.insert(entity);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable UUID id, @RequestBody D dto) {
+    public ResponseEntity<D> update(@PathVariable UUID id, @RequestBody D dto) {
         E entity = mapper.toEntity(dto);
         entity.setId(id); // Garante que o ID da URL seja o ID processado
         E updated = service.update(entity);
@@ -66,7 +66,7 @@ public abstract class GenericController<
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
+    public ResponseEntity<String> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.ok("Registro removido com sucesso.");
     }

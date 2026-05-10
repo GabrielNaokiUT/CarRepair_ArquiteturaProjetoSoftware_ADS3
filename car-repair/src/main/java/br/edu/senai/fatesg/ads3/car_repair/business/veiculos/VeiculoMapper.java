@@ -4,10 +4,8 @@
  */
 package br.edu.senai.fatesg.ads3.car_repair.business.veiculos;
 
-import br.edu.senai.fatesg.ads3.car_repair.business.clientes.IClienteRepository;
+import br.edu.senai.fatesg.ads3.car_repair.business.clientes.ClienteModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.GenericMapper;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,35 +16,45 @@ import org.springframework.stereotype.Component;
 @Component
 public class VeiculoMapper extends GenericMapper<VeiculoModel, VeiculoDTO> implements IVeiculoMapper {
 
-    @Autowired
-    private IClienteRepository clienteRepository;
-    
     @Override
     public VeiculoDTO toDto(VeiculoModel entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         VeiculoDTO dto = new VeiculoDTO();
-        
-        BeanUtils.copyProperties(entity, dto);
-        
+        dto.setId(entity.getId());
         dto.setActive(entity.isAtivo());
+        dto.setPlaca(entity.getPlaca());
+        dto.setMarca(entity.getMarca());
+        dto.setModelo(entity.getModelo());
+        dto.setAnoFabricacao(entity.getAnoFabricacao());
+        dto.setCor(entity.getCor());
+        dto.setQuilometragem(entity.getQuilometragem());
         if (entity.getCliente() != null) {
-            dto.setClienteId(entity.getCliente().getId());
+            dto.setIdCliente(entity.getCliente().getId());
         }
         return dto;
     }
 
     @Override
     public VeiculoModel toEntity(VeiculoDTO dto) {
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
         VeiculoModel entity = new VeiculoModel();
-        
-        BeanUtils.copyProperties(dto, entity);
-        
+        entity.setId(dto.getId());
         entity.setAtivo(dto.isActive());
-        if (dto.getClienteId() != null) {
-            entity.setCliente(clienteRepository.getReferenceById(dto.getClienteId()));
+        entity.setPlaca(dto.getPlaca());
+        entity.setMarca(dto.getMarca());
+        entity.setModelo(dto.getModelo());
+        entity.setAnoFabricacao(dto.getAnoFabricacao());
+        entity.setCor(dto.getCor());
+        entity.setQuilometragem(dto.getQuilometragem());
+        if (dto.getIdCliente() != null) {
+            ClienteModel cliente = new ClienteModel();
+            cliente.setId(dto.getIdCliente());
+            entity.setCliente(cliente);
         }
         return entity;
     }
-    
 }

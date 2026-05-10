@@ -72,7 +72,8 @@ public abstract class GenericService<E extends BaseModel, R extends IGenericRepo
             throw be; // Mantém a exceção de validação original (400, 409, etc)
         } catch (DataAccessException dae) {
             // Captura erros específicos do Spring Data/JPA (ex: DB fora do ar)
-            throw new BusinessException("Falha de persistência ao inserir " + getEntityName(), dae);
+            BusinessException.handleDataAccessException(dae, getEntityName());
+            throw dae;
         } catch (Exception e) {
             throw new BusinessException("Erro inesperado ao processar inserção em " + getEntityName(), e);
         }
@@ -97,7 +98,8 @@ public abstract class GenericService<E extends BaseModel, R extends IGenericRepo
         } catch (BusinessException | FieldValidationException | RuleValidationException be) {
             throw be;
         } catch (DataAccessException dae) {
-            throw new BusinessException("Erro de integridade ao atualizar " + getEntityName(), dae);
+            BusinessException.handleDataAccessException(dae, getEntityName());
+            throw dae;
         } catch (Exception e) {
             throw new BusinessException("Erro inesperado ao processar atualização em " + getEntityName(), e);
         }
