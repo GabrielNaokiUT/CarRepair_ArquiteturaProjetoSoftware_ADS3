@@ -5,6 +5,7 @@
 package br.edu.senai.fatesg.ads3.car_repair.business.servicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -20,15 +21,16 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "Servico")
 @EqualsAndHashCode(callSuper = true)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class ServicoModel extends BaseModel {
 
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "nome", length = 100, nullable = false)
     private String nome;
 
-    @Column(name = "descricao", columnDefinition = "TEXT")
+    @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
 
-    @Column(name = "preco", nullable = false, precision = 10, scale = 2)
-    private BigDecimal preco = BigDecimal.ZERO;
+    @Column(name = "preco", nullable = false)
+    private BigDecimal preco;
 }

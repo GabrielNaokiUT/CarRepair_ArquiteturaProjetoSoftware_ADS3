@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
@@ -22,13 +23,24 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 public abstract class BaseModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", insertable = false, updatable = false)
     private UUID id;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_hora_criacao")
     private Date dataHoraCriacao;
+    
     @Column(name = "ativo")
     private boolean ativo;
+    
+    @PrePersist
+    protected void onCreate(){
+        if(this.dataHoraCriacao == null){
+            this.dataHoraCriacao = new Date();
+        }
+        this.ativo = true;
+    }
 }

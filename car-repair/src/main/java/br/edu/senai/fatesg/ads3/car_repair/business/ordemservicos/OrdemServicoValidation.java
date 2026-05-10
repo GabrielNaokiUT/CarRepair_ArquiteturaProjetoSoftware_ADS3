@@ -17,27 +17,21 @@ import org.springframework.stereotype.Component;
 
 public class OrdemServicoValidation extends GenericValidation<OrdemServicoModel, IOrdemServicoRepository> implements IOrdemServicoValidation {
 
-    @Override
-    public void validateInsert(OrdemServicoModel entity) {
-        if (repository.existsByNumero(entity.getNumero())) {
-            throw new RuleValidationException("Número Duplicado", "Já existe uma ordem de serviço com esse número.");
-        }
-    }
 
     @Override
     public void validateFields(OrdemServicoModel entity) {
         super.validateFields(entity);
-        if (entity.getNumero() == null || entity.getNumero().isBlank()) {
-            throw new FieldValidationException("numero", "O número da ordem de serviço é de preenchimento obrigatório.");
-        }
         if (entity.getDescricaoProblema() == null || entity.getDescricaoProblema().isBlank()) {
-            throw new FieldValidationException("descricaoProblema", "A descrição do problema é de preenchimento obrigatória.");
+            throw new FieldValidationException("descricaoProblema", "A descrição do problema é obrigatória.");
+        }
+        if (entity.getCliente() == null || entity.getCliente().getId() == null) {
+            throw new FieldValidationException("idCliente", "O cliente da ordem de serviço é obrigatório.");
         }
         if (entity.getVeiculo() == null || entity.getVeiculo().getId() == null) {
-            throw new FieldValidationException("veiculoId", "O veículo da ordem de serviço é de preenchimento obrigatório.");
+            throw new FieldValidationException("idVeiculo", "O veículo da ordem de serviço é obrigatório.");
         }
         if (entity.getServico() == null || entity.getServico().getId() == null) {
-            throw new FieldValidationException("servicoId", "O serviço da ordem é de preenchimento obrigatório.");
+            throw new FieldValidationException("idServico", "O serviço da ordem é obrigatório.");
         }
     }
 

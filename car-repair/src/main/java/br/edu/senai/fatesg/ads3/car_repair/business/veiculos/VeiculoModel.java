@@ -5,18 +5,13 @@
 package br.edu.senai.fatesg.ads3.car_repair.business.veiculos;
 
 import br.edu.senai.fatesg.ads3.car_repair.business.clientes.ClienteModel;
-import br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos.OrdemServicoModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,31 +24,30 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "Veiculo")
 @EqualsAndHashCode(callSuper = true)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class VeiculoModel extends BaseModel {
 
-    @Column(name = "placa", nullable = false, unique = true, length = 10)
+    @Column(name = "placa", length = 7, unique = true)
     private String placa;
 
-    @Column(name = "marca", nullable = false, length = 80)
+    @Column(name = "marca", length = 50, nullable = false)
     private String marca;
 
-    @Column(name = "modelo", nullable = false, length = 100)
+    @Column(name = "modelo", length = 50, nullable = false)
     private String modelo;
 
-    @Column(name = "anoFabricacao", nullable = false)
+    @Column(name = "ano_fabricacao", nullable = false)
     private Integer anoFabricacao;
 
-    @Column(name = "cor", length = 50)
+    @Column(name = "cor", length = 20, nullable = false)
     private String cor;
 
     @Column(name = "quilometragem")
     private Integer quilometragem;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "idCliente", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private ClienteModel cliente;
-
-    @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL)
-    private final List<OrdemServicoModel> ordensServico = new ArrayList<>();
 }
+

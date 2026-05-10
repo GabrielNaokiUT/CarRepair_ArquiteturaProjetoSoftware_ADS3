@@ -5,7 +5,6 @@
 package br.edu.senai.fatesg.ads3.car_repair.business.clientes;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.GenericMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,27 +17,41 @@ public class ClienteMapper extends GenericMapper <ClienteModel, ClienteDTO> impl
 
     @Override
     public ClienteDTO toDto(ClienteModel entity) {
-        if (entity == null) return null;
+        if (entity == null) {
+            return null;
+        }
         ClienteDTO dto = new ClienteDTO();
-        
-        BeanUtils.copyProperties(entity, dto);
-        
+        dto.setId(entity.getId());
         dto.setActive(entity.isAtivo());
-        dto.setCep(entity.getCEP()); 
-        
+        dto.setNome(entity.getNome());
+        dto.setCpf(entity.getCpf());
+        dto.setEmail(entity.getEmail());
+        dto.setTelefone(entity.getTelefone());
+        dto.setEndereco(entity.getEndereco());
+        dto.setBairro(entity.getBairro());
+        dto.setCidade(entity.getCidade());
+        dto.setEstado(entity.getEstado());
+        dto.setCep(entity.getCep());
         return dto;
     }
 
     @Override
     public ClienteModel toEntity(ClienteDTO dto) {
-        if (dto == null) return null;
+        if (dto == null) {
+            return null;
+        }
         ClienteModel entity = new ClienteModel();
-        
-        BeanUtils.copyProperties(dto, entity);
-        
+        entity.setId(dto.getId());
         entity.setAtivo(dto.isActive());
-        entity.setCEP(dto.getCep());
-        
+        entity.setNome(dto.getNome());
+        entity.setCpf(dto.getCpf());
+        entity.setEmail(dto.getEmail());
+        entity.setTelefone(dto.getTelefone());
+        entity.setEndereco(dto.getEndereco());
+        entity.setBairro(dto.getBairro());
+        entity.setCidade(dto.getCidade());
+        entity.setEstado(dto.getEstado());
+        entity.setCep(dto.getCep());
         return entity;
-    }    
+    }   
 }

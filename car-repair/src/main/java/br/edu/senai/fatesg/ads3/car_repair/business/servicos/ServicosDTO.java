@@ -6,23 +6,23 @@ package br.edu.senai.fatesg.ads3.car_repair.business.servicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Date;
+import java.util.UUID;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 
 /**
  *
  * @author Gabriel
  */
 
-@Getter 
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 
 public class ServicosDTO extends BaseDTO {
     
+    private UUID idServico;
     private String nome;
     private String descricao;
     private BigDecimal preco;

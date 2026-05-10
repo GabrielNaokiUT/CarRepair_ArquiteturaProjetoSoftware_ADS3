@@ -6,29 +6,27 @@ package br.edu.senai.fatesg.ads3.car_repair.business.veiculos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 
 /**
  *
  * @author Gabriel
  */
 
-@Getter
-@Setter
-@NoArgsConstructor 
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 
 public class VeiculoDTO extends BaseDTO {
     
+    private UUID idVeiculo;
     private String placa;
     private String marca;
     private String modelo;
     private Integer anoFabricacao;
     private String cor;
     private Integer quilometragem;
-    private UUID clienteId;
+    private UUID idCliente;
     
 }
