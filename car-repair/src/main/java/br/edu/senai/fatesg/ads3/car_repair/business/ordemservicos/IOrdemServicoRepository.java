@@ -15,5 +15,5 @@ import org.springframework.stereotype.Repository;
 
 public interface IOrdemServicoRepository extends IGenericRepository<OrdemServicoModel> {
 
-    boolean existsByNumero(String numero);
+    // boolean existsByNumero(String numero);
 }
