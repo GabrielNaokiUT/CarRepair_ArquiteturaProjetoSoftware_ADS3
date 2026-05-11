@@ -8,6 +8,6 @@ package br.edu.senai.fatesg.ads3.car_repair.business.clientes;
  *
  * @author Gabriel
  */
-public class ClienteReporsitory {
+public class ClienteRepository {
     
 }
