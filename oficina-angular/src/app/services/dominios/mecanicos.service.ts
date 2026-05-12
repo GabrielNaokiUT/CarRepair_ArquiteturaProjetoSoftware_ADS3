@@ -19,7 +19,7 @@ export class MecanicosService extends ApiBaseService {
   }
 
   listar(): Observable<Mecanico[]> {
-    return this.get<Mecanico[]>(this.endpoint).pipe(
+    return this.get<Mecanico[]>(`${this.endpoint}/todos`).pipe(
       tap((mecanicos) => {
         this.mecanicos = [...mecanicos];
       }),

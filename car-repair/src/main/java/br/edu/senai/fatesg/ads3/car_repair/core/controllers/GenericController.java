@@ -5,7 +5,9 @@ import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.IGenericMapper;
 import br.edu.senai.fatesg.ads3.car_repair.core.services.IGenericService;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,17 +15,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 /**
  * E: Entity (Entidade de Banco)
  * D: DTO (Data Transfer Object)
  * S: Service especializado
  * M: Mapper especializado
+ * @author Caio4breu
  * @param <E>
  * @param <D>
  * @param <S>
  * @param <M>
  */
+
 public abstract class GenericController<
     E extends BaseModel, 
     D extends BaseDTO, 
@@ -47,6 +50,22 @@ public abstract class GenericController<
     public ResponseEntity<Page<D>> findAll(Pageable pageable) {
         Page<E> entities = service.findAllActive(pageable);
         Page<D> dtos = mapper.toDtoPage(entities);
+        return ResponseEntity.ok(dtos);
+    }
+    
+    // Endpoint novo: GET /clientes/todos, GET /veiculos/todos, etc.
+    // Retorna lista simples sem paginação — necessário para o frontend Angular funcionar corretamente
+    @GetMapping("/todos")
+    public ResponseEntity<List<D>> findAllList() {
+        // Busca todas as entidades ativas sem paginação
+        List<E> entities = service.findAllActiveList();
+
+        // Converte cada entidade para DTO antes de enviar para o frontend
+        // O mapper já existia no projeto — só estamos reutilizando ele aqui
+        List<D> dtos = entities.stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(dtos);
     }
 

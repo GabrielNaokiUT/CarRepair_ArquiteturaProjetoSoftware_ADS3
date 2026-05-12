@@ -19,10 +19,9 @@ export class VeiculosService extends ApiBaseService {
   }
 
   listar(): Observable<Veiculo[]> {
-    return this.get<Veiculo[]>(this.endpoint).pipe(
+    return this.get<Veiculo[]>(`${this.endpoint}/todos`).pipe(
       tap((veiculos) => {
         this.veiculos = [...veiculos];
-        // UUIDs used for ids; no numeric next id calculation needed
       }),
       catchError((err) => throwError(() => err))
     );

@@ -19,7 +19,7 @@ export class OrdensServicoService extends ApiBaseService {
   }
 
   listar(): Observable<OrdemServico[]> {
-    return this.get<OrdemServico[]>(this.endpoint).pipe(
+    return this.get<OrdemServico[]>(`${this.endpoint}/todos`).pipe(
       tap((ordens) => {
         this.ordens = [...ordens];
       }),
