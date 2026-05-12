@@ -6,14 +6,19 @@ import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.FieldValidationExcept
 import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.RuleValidationException;
 import br.edu.senai.fatesg.ads3.car_repair.core.repositories.IGenericRepository;
 import br.edu.senai.fatesg.ads3.car_repair.core.validations.IGenericValidation;
+import java.util.List;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author Caio4breu
+ */
 
 
 public abstract class GenericService<E extends BaseModel, R extends IGenericRepository<E>, V extends IGenericValidation<E, R>>
@@ -51,7 +56,19 @@ public abstract class GenericService<E extends BaseModel, R extends IGenericRepo
             throw new BusinessException("Erro ao localizar o registro em " + getEntityName(), e);
         }
     }
-
+    
+    @Override
+    @Transactional(readOnly = true) // Só leitura — o Spring otimiza a transação
+    public List<E> findAllActiveList() {
+        try {
+            // Chama o método sem paginação que declaramos no Repository
+            return repository.findAllByAtivoTrue();
+        } catch (Exception e) {
+            // Qualquer erro inesperado do banco vira uma BusinessException no padrão do projeto
+            throw new BusinessException("Erro ao listar registros em " + getEntityName(), e);
+        }
+    }
+    
     @Override
     @Transactional
     public E insert(E entity) {
