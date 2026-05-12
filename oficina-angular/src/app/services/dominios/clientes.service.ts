@@ -19,7 +19,7 @@ export class ClientesService extends ApiBaseService {
   }
 
   listar(): Observable<Cliente[]> {
-    return this.get<Cliente[]>(this.endpoint).pipe(
+    return this.get<Cliente[]>(`${this.endpoint}/todos`).pipe(
       tap((clientes) => {
         this.clientes = [...clientes];
       }),
