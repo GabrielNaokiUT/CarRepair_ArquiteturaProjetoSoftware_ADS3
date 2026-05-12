@@ -8,6 +8,7 @@ import br.edu.senai.fatesg.ads3.car_repair.core.services.IGenericService;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,12 @@ public abstract class GenericController<
 
     @GetMapping
     public ResponseEntity<Page<D>> findAll(Pageable pageable) {
-        Page<E> entities = service.findAllActive(pageable);
+        
+        int size = Math.min(pageable.getPageSize(), 50);
+        Pageable paginacaoSegura = PageRequest.of(pageable.getPageNumber(), size);
+        
+        
+        Page<E> entities = service.findAllActive(paginacaoSegura);
         Page<D> dtos = mapper.toDtoPage(entities);
         return ResponseEntity.ok(dtos);
     }
@@ -70,4 +76,5 @@ public abstract class GenericController<
         service.delete(id);
         return ResponseEntity.ok("Registro removido com sucesso.");
     }
+
 }
