@@ -14,16 +14,17 @@ import org.springframework.data.domain.Pageable;
  * @author Caio4breu
  */
 
-
 public interface IGenericService<E extends BaseModel, R extends IGenericRepository<E>, V extends IGenericValidation<E, R>> {
 
 	E findByIdActive(UUID id);
         
-        // retorna lista simples sem paginação para o frontend
+        // Método original com paginação — mantido para não quebrar o findAll existente
+        Page<E> findAllActive(Pageable pageable);
+
+        // Método novo sem paginação — necessário para o frontend receber um array simples
         List<E> findAllActiveList();
 
 	E insert(E entity);
 	E update(E entity);
 	void delete(UUID id);
-
 }
