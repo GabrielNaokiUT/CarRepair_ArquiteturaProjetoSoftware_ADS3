@@ -26,15 +26,55 @@ public class ClienteValidation extends GenericValidation<ClienteModel, IClienteR
         if (entity.getCpf() == null || entity.getCpf().isBlank()) {
             throw new FieldValidationException("cpf", "O CPF do cliente é de preenchimento obrigatório.");
         }
+
         if (entity.getCpf().replaceAll("[^0-9]", "").length() != 11) {
             throw new FieldValidationException("cpf", "O CPF deve conter 11 dígitos numéricos.");
         }
-    }
+   
+        String cpfCompleto = entity.getCep().replaceAll("[^0-9]", "");
+        if(cpfCompleto.chars().distinct().count() == 1){
+            throw new FieldValidationException("cpf", "CPF inválido.");
+        }
+        if(!validarAlgoritmoCPF(cpfCompleto)){
+            throw new FieldValidationException("cpf", "CPF inválido.");  
+        }
+        
+        //Email
+        if(entity.getEmail() != null && !entity.getEmail().isBlank()){
+            if(!entity.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")){
+                throw new FieldValidationException("email", "O e-mail informado nãi é válido.");
+            }
+        }
+     }    
 
     @Override
     public void validateInsert(ClienteModel entity) {
         if (repository.existsByCpf(entity.getCpf())) {
             throw new RuleValidationException("CPF Duplicado", "Já existe um cliente cadastrado com esse CPF.");
         }
+    }
+
+    private boolean validarAlgoritmoCPF(String cpfCompleto) { //Algoritmo oficial de validação do CPF
+        int soma = 0;
+        for (int i = 0; i < 9; i++) {
+            soma += (cpfCompleto.charAt(i) - '0') * (10 - i);
+        }
+        int primeiroDigito = 11 - (soma % 11);
+        if (primeiroDigito >= 10) {
+            primeiroDigito = 0;
+        }
+        if (primeiroDigito != (cpfCompleto.charAt(9) - '0')) {
+            return false;
+        }
+
+        soma = 0;
+        for (int i = 0; i < 10; i++) {
+            soma += (cpfCompleto.charAt(i) - '0') * (11 - i);
+        }
+        int segundoDigito = 11 - (soma % 11);
+        if (segundoDigito >= 10) {
+            segundoDigito = 0;
+        }
+        return segundoDigito == (cpfCompleto.charAt(10) - '0');
     }
 }
