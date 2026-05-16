@@ -17,7 +17,7 @@ export class UsuariosService extends ApiBaseService {
   }
 
   listar(): Observable<Usuario[]> {
-    return this.get<Usuario[]>(${this.endpoint}/todos).pipe(
+    return this.get<Usuario[]>(`${this.endpoint}/todos`).pipe(
       tap((usuarios) => {
         this.usuarios = [...usuarios];
       }),
