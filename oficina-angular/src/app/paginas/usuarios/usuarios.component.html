@@ -1,0 +1,54 @@
+﻿<section class="pagina">
+  <h1>Usuarios</h1>
+
+  <form #formUsuario="ngForm" class="formulario" (ngSubmit)="salvarUsuario(formUsuario)">
+    <label>
+      Nome
+      <input name="nome" [(ngModel)]="novoUsuario.nome" required minlength="3" />
+    </label>
+
+    <label>
+      Login
+      <input name="login" [(ngModel)]="novoUsuario.login" required minlength="3" />
+    </label>
+
+    <label>
+      E-mail
+      <input name="email" [(ngModel)]="novoUsuario.email" required type="email" />
+    </label>
+
+    <label>
+      Perfil
+      <select name="perfil" [(ngModel)]="novoUsuario.perfil" required>
+        <option value="administrativo">Administrativo</option>
+        <option value="atendente">Atendente</option>
+        <option value="gestor">Gestor</option>
+      </select>
+    </label>
+
+    <ul class="erros" *ngIf="errosFormulario.length">
+      <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+    </ul>
+
+    <button type="submit">Adicionar usuario</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Login</th>
+        <th>E-mail</th>
+        <th>Perfil</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <td>{{ usuario.nome }}</td>
+        <td>{{ usuario.login }}</td>
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.perfil }}</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
