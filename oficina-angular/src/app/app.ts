@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { MensagensComponent } from './shared/mensagens/mensagens.component';
 
@@ -11,4 +11,10 @@ import { MensagensComponent } from './shared/mensagens/mensagens.component';
 })
 export class App {
   readonly titulo = 'Oficina Acadêmica';
+
+  private readonly router = inject(Router);
+
+  get isPreview(): boolean {
+    return this.router.url.startsWith('/preview');
+  }
 }

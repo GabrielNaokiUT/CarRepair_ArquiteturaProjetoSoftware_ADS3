@@ -3,6 +3,7 @@ import { ClientesComponent } from './paginas/clientes/clientes.component';
 import { DashboardComponent } from './paginas/dashboard/dashboard.component';
 import { MecanicosComponent } from './paginas/mecanicos/mecanicos.component';
 import { OrdensServicoComponent } from './paginas/ordens-servico/ordens-servico.component';
+import { PreviewComponent } from './paginas/preview/preview.component';
 import { UsuariosComponent } from './paginas/usuarios/usuarios.component';
 import { VeiculosComponent } from './paginas/veiculos/veiculos.component';
 
@@ -35,5 +36,9 @@ export const routes: Routes = [
   {
     path: 'usuarios',
     component: UsuariosComponent
+  },
+  {
+    path: 'preview',
+    component: PreviewComponent
   }
 ];
