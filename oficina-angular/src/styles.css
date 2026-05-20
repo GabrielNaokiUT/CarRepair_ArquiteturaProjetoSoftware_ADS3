@@ -1,1 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface-2: #17171f;
+  --border: rgba(255,255,255,0.08);
+  --accent: #e8520a;
+  --accent-dim: rgba(232,82,10,0.15);
+  --text: #f0ede8;
+  --muted: #8a8790;
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', Arial, sans-serif;
+}
+
 /* You can add global styles to this file, and also import other style files */

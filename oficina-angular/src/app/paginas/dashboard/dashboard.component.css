@@ -1,23 +1,110 @@
-.grid {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+:host {
+  --p1: #1a2744;
+  --p5: #f5f0e6;
+  --bg: #f5f0e6;
+  --bg2: #ede8db;
+  --accent: #c9a86c;
+  --accent-dark: #9a7a38;
+  --surface: #ffffff;
+  --border: rgba(26,39,68,0.1);
+  --text: #1a1a1a;
+  --muted: #6b6560;
 }
 
-.card {
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  background: #fff;
+.dash-page { background: var(--bg); min-height: calc(100vh - 64px); }
+
+.dash-hero {
+  background: var(--p1);
+  padding: 5rem 4rem 4rem;
+  border-bottom: 2px solid var(--accent);
 }
 
-.card h2 {
-  margin: 0;
-  font-size: 1rem;
+.dash-hero-inner {
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.card strong {
+.dash-eyebrow {
   display: block;
-  margin-top: 0.5rem;
-  font-size: 1.8rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(201,168,108,0.7);
+  margin-bottom: 1.5rem;
+}
+
+.dash-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--p5);
+  margin: 0 0 1rem;
+  line-height: 1.05;
+}
+
+.dash-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.dash-sub {
+  font-size: 1rem;
+  color: rgba(245,240,230,0.55);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.dash-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 4rem 4rem;
+}
+
+.dash-section-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent-dark);
+  margin-bottom: 1.25rem;
+}
+
+.dash-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.dash-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 12px 12px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 2px 16px rgba(26,39,68,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dash-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(26,39,68,0.1);
+}
+
+.dash-card-lbl {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.dash-card-val {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--p1);
+  line-height: 1;
 }

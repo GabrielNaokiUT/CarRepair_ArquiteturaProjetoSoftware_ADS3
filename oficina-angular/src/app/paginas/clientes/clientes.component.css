@@ -1,5 +1,202 @@
-.erros {
-  margin: 0;
-  padding-left: 1rem;
-  color: #991b1b;
+:host {
+  --p1: #1a2744;
+  --p5: #f5f0e6;
+  --bg: #f5f0e6;
+  --accent: #c9a86c;
+  --accent-dark: #9a7a38;
+  --surface: #ffffff;
+  --border: rgba(26,39,68,0.1);
+  --text: #1a1a1a;
+  --muted: #6b6560;
 }
+
+.inner-page { background: var(--bg); min-height: calc(100vh - 64px); }
+
+.inner-hero {
+  background: var(--p1);
+  padding: 2.5rem 4rem;
+  border-bottom: 2px solid var(--accent);
+}
+
+.inner-hero-top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.inner-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(201,168,108,0.7);
+  margin-bottom: 0.35rem;
+}
+
+.inner-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--p5);
+  line-height: 1;
+}
+
+.inner-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 4rem 4rem;
+}
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 12px 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(26,39,68,0.07);
+}
+
+.form-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--p1);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.form-group label {
+  font-size: 0.67rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.form-group input,
+.form-group select {
+  background: var(--bg);
+  border: 1px solid rgba(26,39,68,0.14);
+  border-radius: 7px;
+  padding: 0.65rem 0.9rem;
+  color: var(--text);
+  font-size: 0.858rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(201,168,108,0.1);
+}
+
+.form-group input::placeholder { color: rgba(26,39,68,0.25); }
+
+.form-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+.btn-save {
+  background: var(--p1);
+  color: var(--p5);
+  border: none;
+  padding: 0.65rem 1.3rem;
+  border-radius: 7px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+  letter-spacing: -0.01em;
+}
+
+.btn-save:hover { opacity: 0.85; }
+
+.erros {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.erros li {
+  font-size: 0.82rem;
+  color: #6b2040;
+  background: rgba(74,26,46,0.06);
+  border: 1px solid rgba(74,26,46,0.12);
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+}
+
+.table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(26,39,68,0.06);
+}
+
+.table-top {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(26,39,68,0.02);
+}
+
+.table-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.table-card table { width: 100%; border-collapse: collapse; }
+
+.table-card thead tr { border-bottom: 1px solid var(--border); background: rgba(26,39,68,0.02); }
+
+.table-card thead th {
+  padding: 0.85rem 1.5rem;
+  text-align: left;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.table-card tbody tr {
+  border-bottom: 1px solid rgba(26,39,68,0.05);
+  transition: background 0.15s;
+}
+
+.table-card tbody tr:last-child { border-bottom: none; }
+.table-card tbody tr:hover { background: rgba(201,168,108,0.03); }
+
+.table-card tbody td {
+  padding: 1rem 1.5rem;
+  font-size: 0.845rem;
+  color: var(--muted);
+}
+
+.td-p { color: var(--p1) !important; font-weight: 600; }

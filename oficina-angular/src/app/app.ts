@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { NgIf } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { MensagensComponent } from './shared/mensagens/mensagens.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MensagensComponent],
+  imports: [NgIf, RouterOutlet, RouterLink, RouterLinkActive, MensagensComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
