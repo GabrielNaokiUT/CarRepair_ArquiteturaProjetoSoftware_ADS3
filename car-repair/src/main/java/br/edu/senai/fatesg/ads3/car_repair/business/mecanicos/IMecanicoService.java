@@ -1,6 +1,6 @@
-﻿package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
+package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.services.IGenericService;
 
-public interface IMecanicoService extends IGenericService<MecanicoModel> {
+public interface IMecanicoService extends IGenericService<MecanicoModel, IMecanicoRepository, IMecanicoValidation> {
 }

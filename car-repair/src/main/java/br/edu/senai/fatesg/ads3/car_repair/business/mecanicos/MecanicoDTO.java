@@ -1,6 +1,6 @@
-﻿package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
+package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
 
-import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseDTO;
+import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,36 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.business.clientes.ClienteModel;
+import br.edu.senai.fatesg.ads3.car_repair.business.mecanicos.MecanicoModel;
+import br.edu.senai.fatesg.ads3.car_repair.business.pecas.PecaModel;
 import br.edu.senai.fatesg.ads3.car_repair.business.servicos.ServicoModel;
+import br.edu.senai.fatesg.ads3.car_repair.business.usuarios.UsuarioModel;
 import br.edu.senai.fatesg.ads3.car_repair.business.veiculos.VeiculoModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- *
- * @author Gabriel
- */
 @Data
 @Entity
 @Table(name = "OrdemServico")
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class OrdemServicoModel extends BaseModel {
 
     public enum StatusOrdemServico {
@@ -42,7 +32,7 @@ public class OrdemServicoModel extends BaseModel {
 
     @Column(name = "descricao_problema", length = 200, nullable = false)
     private String descricaoProblema;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 30)
     private StatusOrdemServico statusOrdemServico = StatusOrdemServico.ABERTA;
@@ -65,6 +55,26 @@ public class OrdemServicoModel extends BaseModel {
     private VeiculoModel veiculo;
 
     @ManyToOne
-    @JoinColumn(name = "servico_id")
-    private ServicoModel servico;
+    @JoinColumn(name = "mecanico_responsavel_id")
+    private MecanicoModel mecanicoResponsavel;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_responsavel_id")
+    private UsuarioModel usuarioResponsavel;
+
+    @ManyToMany
+    @JoinTable(
+        name = "ordem_servico_servicos",
+        joinColumns = @JoinColumn(name = "ordem_servico_id"),
+        inverseJoinColumns = @JoinColumn(name = "servico_id")
+    )
+    private List<ServicoModel> servicosExecutados = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "ordem_servico_pecas",
+        joinColumns = @JoinColumn(name = "ordem_servico_id"),
+        inverseJoinColumns = @JoinColumn(name = "peca_id")
+    )
+    private List<PecaModel> pecasAplicadas = new ArrayList<>();
 }
