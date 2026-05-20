@@ -1,107 +1,197 @@
-<section class="pagina">
-  <h1>Ordens de Serviço</h1>
+<div class="inner-page">
 
-  <form #formOs="ngForm" class="formulario" (ngSubmit)="salvarOrdemServico(formOs)">
-    <label>
-      Cliente
-      <select name="clienteId" [(ngModel)]="novaOrdem.clienteId" required>
-        <option [ngValue]="0">Selecione</option>
-        <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">{{ cliente.nome }}</option>
-      </select>
-    </label>
-
-    <label>
-      Veículo
-      <select name="veiculoId" [(ngModel)]="novaOrdem.veiculoId" required>
-        <option [ngValue]="0">Selecione</option>
-        <option *ngFor="let veiculo of veiculos" [ngValue]="veiculo.id">
-          {{ veiculo.placa }} - {{ veiculo.modelo }}
-        </option>
-      </select>
-    </label>
-
-    <label>
-      Usuário responsável
-      <select name="usuarioResponsavelId" [(ngModel)]="novaOrdem.usuarioResponsavelId" required>
-        <option [ngValue]="0">Selecione</option>
-        <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">{{ usuario.nome }}</option>
-      </select>
-    </label>
-
-    <label>
-      Mecânico responsável
-      <select name="mecanicoResponsavelId" [(ngModel)]="novaOrdem.mecanicoResponsavelId" required>
-        <option [ngValue]="0">Selecione</option>
-        <option *ngFor="let mecanico of mecanicos" [ngValue]="mecanico.id">{{ mecanico.nome }}</option>
-      </select>
-    </label>
-
-    <label>
-      Data de abertura
-      <input name="dataAbertura" type="date" [(ngModel)]="novaOrdem.dataAbertura" required />
-    </label>
-
-    <label>
-      Descrição do problema
-      <textarea name="descricaoProblema" [(ngModel)]="novaOrdem.descricaoProblema" required minlength="10"></textarea>
-    </label>
-
-    <fieldset>
-      <legend>Serviços executados</legend>
-      <div class="linha-inline">
-        <input name="servicoDescricao" [(ngModel)]="novoServico.descricao" placeholder="Descrição do serviço" />
-        <input name="servicoValor" type="number" [(ngModel)]="novoServico.valor" placeholder="Valor" />
-        <input name="servicoTempo" type="number" [(ngModel)]="novoServico.tempoExecucaoHoras" placeholder="Tempo (h)" />
-        <button type="button" (click)="adicionarServico()">Adicionar serviço</button>
+  <div class="inner-hero">
+    <div class="inner-hero-top">
+      <div>
+        <div class="inner-label">Gestão</div>
+        <div class="inner-title">Ordens de Serviço</div>
       </div>
-      <ul>
-        <li *ngFor="let servico of servicosTemp">
-          {{ servico.descricao }} - R$ {{ servico.valor | number: '1.2-2' }} - {{ servico.tempoExecucaoHoras }}h
-        </li>
-      </ul>
-    </fieldset>
-
-    <fieldset>
-      <legend>Peças aplicadas</legend>
-      <div class="linha-inline">
-        <input name="pecaDescricao" [(ngModel)]="novaPeca.descricao" placeholder="Descrição da peça" />
-        <input name="pecaQuantidade" type="number" [(ngModel)]="novaPeca.quantidade" placeholder="Qtd." />
-        <input name="pecaValorUnitario" type="number" [(ngModel)]="novaPeca.valorUnitario" placeholder="Valor unitário" />
-        <button type="button" (click)="adicionarPeca()">Adicionar peça</button>
-      </div>
-      <ul>
-        <li *ngFor="let peca of pecasTemp">
-          {{ peca.descricao }} - {{ peca.quantidade }}x - R$ {{ peca.valorUnitario | number: '1.2-2' }}
-        </li>
-      </ul>
-    </fieldset>
-
-    <ul class="erros" *ngIf="errosFormulario.length">
-      <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
-    </ul>
-
-    <button type="submit">Cadastrar ordem de serviço</button>
-  </form>
-
-  <div class="lista-os" *ngFor="let ordem of ordensServico">
-    <h2>OS #{{ ordem.id }} - {{ ordem.status }}</h2>
-    <p><strong>Cliente:</strong> {{ nomeCliente(ordem.clienteId) }}</p>
-    <p><strong>Veículo:</strong> {{ dadosVeiculo(ordem.veiculoId) }}</p>
-    <p><strong>Mecânico:</strong> {{ nomeMecanico(ordem.mecanicoResponsavelId) }}</p>
-    <p><strong>Problema:</strong> {{ ordem.descricaoProblema }}</p>
-
-    <p><strong>Serviços:</strong></p>
-    <ul>
-      <li *ngFor="let servico of ordem.servicosExecutados">
-        {{ servico.descricao }} - R$ {{ servico.valor | number: '1.2-2' }} - {{ servico.tempoExecucaoHoras }}h
-      </li>
-    </ul>
-
-    <p><strong>Peças aplicadas:</strong></p>
-    <ul>
-      <li *ngFor="let peca of ordem.pecasAplicadas">
-        {{ peca.descricao }} - {{ peca.quantidade }}x - R$ {{ peca.valorUnitario | number: '1.2-2' }}
-      </li>
-    </ul>
+    </div>
   </div>
-</section>
+
+  <div class="inner-content">
+
+    <div class="form-card">
+      <div class="form-title">Nova Ordem de Serviço</div>
+
+      <form #formOs="ngForm" (ngSubmit)="salvarOrdemServico(formOs)">
+
+        <div class="form-grid form-grid-2">
+          <div class="form-group">
+            <label>Cliente</label>
+            <select name="clienteId" [(ngModel)]="novaOrdem.clienteId" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">{{ cliente.nome }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Veículo</label>
+            <select name="veiculoId" [(ngModel)]="novaOrdem.veiculoId" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let veiculo of veiculos" [ngValue]="veiculo.id">
+                {{ veiculo.placa }} - {{ veiculo.modelo }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Usuário Responsável</label>
+            <select name="usuarioResponsavelId" [(ngModel)]="novaOrdem.usuarioResponsavelId" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">{{ usuario.nome }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Mecânico Responsável</label>
+            <select name="mecanicoResponsavelId" [(ngModel)]="novaOrdem.mecanicoResponsavelId" required>
+              <option [ngValue]="0">Selecione</option>
+              <option *ngFor="let mecanico of mecanicos" [ngValue]="mecanico.id">{{ mecanico.nome }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Data de Abertura</label>
+            <input name="dataAbertura" type="date" [(ngModel)]="novaOrdem.dataAbertura" required />
+          </div>
+
+          <div class="form-group form-full">
+            <label>Descrição do Problema</label>
+            <textarea name="descricaoProblema" [(ngModel)]="novaOrdem.descricaoProblema" required minlength="10" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="fieldset-card">
+          <div class="fieldset-title">Serviços Executados</div>
+          <div class="inline-row">
+            <div class="form-group">
+              <label>Descrição</label>
+              <input name="servicoDescricao" [(ngModel)]="novoServico.descricao" placeholder="Ex: Troca de óleo" />
+            </div>
+            <div class="form-group form-group-sm">
+              <label>Valor (R$)</label>
+              <input name="servicoValor" type="number" [(ngModel)]="novoServico.valor" placeholder="0,00" />
+            </div>
+            <div class="form-group form-group-sm">
+              <label>Tempo (h)</label>
+              <input name="servicoTempo" type="number" [(ngModel)]="novoServico.tempoExecucaoHoras" placeholder="0" />
+            </div>
+            <div class="form-group form-group-action">
+              <label>&nbsp;</label>
+              <button type="button" class="btn-add" (click)="adicionarServico()">+ Adicionar</button>
+            </div>
+          </div>
+          <ul class="temp-list" *ngIf="servicosTemp.length">
+            <li *ngFor="let servico of servicosTemp">
+              <span class="temp-nome">{{ servico.descricao }}</span>
+              <span class="temp-meta">R$ {{ servico.valor | number: '1.2-2' }} &bull; {{ servico.tempoExecucaoHoras }}h</span>
+            </li>
+          </ul>
+          <div class="temp-empty" *ngIf="!servicosTemp.length">Nenhum serviço adicionado ainda.</div>
+        </div>
+
+        <div class="fieldset-card">
+          <div class="fieldset-title">Peças Aplicadas</div>
+          <div class="inline-row">
+            <div class="form-group">
+              <label>Descrição</label>
+              <input name="pecaDescricao" [(ngModel)]="novaPeca.descricao" placeholder="Ex: Filtro de ar" />
+            </div>
+            <div class="form-group form-group-sm">
+              <label>Quantidade</label>
+              <input name="pecaQuantidade" type="number" [(ngModel)]="novaPeca.quantidade" placeholder="1" />
+            </div>
+            <div class="form-group form-group-sm">
+              <label>Valor Unit. (R$)</label>
+              <input name="pecaValorUnitario" type="number" [(ngModel)]="novaPeca.valorUnitario" placeholder="0,00" />
+            </div>
+            <div class="form-group form-group-action">
+              <label>&nbsp;</label>
+              <button type="button" class="btn-add" (click)="adicionarPeca()">+ Adicionar</button>
+            </div>
+          </div>
+          <ul class="temp-list" *ngIf="pecasTemp.length">
+            <li *ngFor="let peca of pecasTemp">
+              <span class="temp-nome">{{ peca.descricao }}</span>
+              <span class="temp-meta">{{ peca.quantidade }}x &bull; R$ {{ peca.valorUnitario | number: '1.2-2' }}</span>
+            </li>
+          </ul>
+          <div class="temp-empty" *ngIf="!pecasTemp.length">Nenhuma peça adicionada ainda.</div>
+        </div>
+
+        <ul class="erros" *ngIf="errosFormulario.length">
+          <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+        </ul>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Cadastrar Ordem de Serviço</button>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="table-card">
+      <div class="table-top">
+        <span class="table-count">{{ ordensServico.length }} ordem(ns) cadastrada(s)</span>
+      </div>
+
+      <div class="os-list">
+        <div class="os-item" *ngFor="let ordem of ordensServico">
+          <div class="os-header">
+            <div class="os-id">OS #{{ ordem.id }}</div>
+            <span class="badge" [ngClass]="{
+              'b-aberta':      ordem.status === 'aberta',
+              'b-execucao':    ordem.status === 'em_execucao',
+              'b-concluida':   ordem.status === 'concluida',
+              'b-cancelada':   ordem.status === 'cancelada'
+            }">{{ ordem.status }}</span>
+          </div>
+
+          <div class="os-body">
+            <div class="os-info-grid">
+              <div class="os-info-item">
+                <span class="os-info-label">Cliente</span>
+                <span class="os-info-val td-p">{{ nomeCliente(ordem.clienteId) }}</span>
+              </div>
+              <div class="os-info-item">
+                <span class="os-info-label">Veículo</span>
+                <span class="os-info-val">{{ dadosVeiculo(ordem.veiculoId) }}</span>
+              </div>
+              <div class="os-info-item">
+                <span class="os-info-label">Mecânico</span>
+                <span class="os-info-val">{{ nomeMecanico(ordem.mecanicoResponsavelId) }}</span>
+              </div>
+              <div class="os-info-item os-info-full">
+                <span class="os-info-label">Problema</span>
+                <span class="os-info-val">{{ ordem.descricaoProblema }}</span>
+              </div>
+            </div>
+
+            <div class="os-sublists" *ngIf="ordem.servicosExecutados?.length || ordem.pecasAplicadas?.length">
+              <div class="os-sublist" *ngIf="ordem.servicosExecutados?.length">
+                <div class="os-sublist-title">Serviços</div>
+                <ul>
+                  <li *ngFor="let servico of ordem.servicosExecutados">
+                    {{ servico.descricao }} &bull; R$ {{ servico.valor | number: '1.2-2' }} &bull; {{ servico.tempoExecucaoHoras }}h
+                  </li>
+                </ul>
+              </div>
+              <div class="os-sublist" *ngIf="ordem.pecasAplicadas?.length">
+                <div class="os-sublist-title">Peças</div>
+                <ul>
+                  <li *ngFor="let peca of ordem.pecasAplicadas">
+                    {{ peca.descricao }} &bull; {{ peca.quantidade }}x &bull; R$ {{ peca.valorUnitario | number: '1.2-2' }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="os-empty" *ngIf="!ordensServico.length">Nenhuma ordem de serviço cadastrada.</div>
+      </div>
+    </div>
+
+  </div>
+</div>

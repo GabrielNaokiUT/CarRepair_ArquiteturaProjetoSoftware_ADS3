@@ -1,23 +1,31 @@
-<section class="pagina">
-  <h1>Dashboard da Oficina</h1>
-  <p>Aplicação acadêmica para gestão dos principais fluxos da oficina mecânica.</p>
-
-  <div class="grid">
-    <article class="card">
-      <h2>Clientes</h2>
-      <strong>{{ totalClientes }}</strong>
-    </article>
-    <article class="card">
-      <h2>Veículos</h2>
-      <strong>{{ totalVeiculos }}</strong>
-    </article>
-    <article class="card">
-      <h2>Mecânicos</h2>
-      <strong>{{ totalMecanicos }}</strong>
-    </article>
-    <article class="card">
-      <h2>Ordens de Serviço</h2>
-      <strong>{{ totalOrdensServico }}</strong>
-    </article>
+<div class="dash-page">
+  <div class="dash-hero">
+    <div class="dash-hero-inner">
+      <span class="dash-eyebrow">SENAI FATESG &nbsp;·&nbsp; Análise e Desenvolvimento de Sistemas &nbsp;·&nbsp; 3º Semestre</span>
+      <h1 class="dash-title">Gestão de Oficina<br><em>Mecânica</em></h1>
+      <p class="dash-sub">Sistema acadêmico com arquitetura em camadas, domínios isolados e API REST.</p>
+    </div>
   </div>
-</section>
+
+  <div class="dash-content">
+    <div class="dash-section-label">Resumo geral</div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <div class="dash-card-lbl">Clientes</div>
+        <div class="dash-card-val">{{ totalClientes }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-lbl">Veículos</div>
+        <div class="dash-card-val">{{ totalVeiculos }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-lbl">Mecânicos</div>
+        <div class="dash-card-val">{{ totalMecanicos }}</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-lbl">Ordens de Serviço</div>
+        <div class="dash-card-val">{{ totalOrdensServico }}</div>
+      </div>
+    </div>
+  </div>
+</div>
