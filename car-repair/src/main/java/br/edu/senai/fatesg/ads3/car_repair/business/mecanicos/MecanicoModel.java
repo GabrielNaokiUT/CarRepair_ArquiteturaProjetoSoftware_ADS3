@@ -1,4 +1,4 @@
-﻿package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
+package br.edu.senai.fatesg.ads3.car_repair.business.mecanicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

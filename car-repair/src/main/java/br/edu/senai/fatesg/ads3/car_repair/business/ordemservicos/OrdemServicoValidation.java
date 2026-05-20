@@ -5,7 +5,6 @@
 package br.edu.senai.fatesg.ads3.car_repair.business.ordemservicos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.FieldValidationException;
-import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.RuleValidationException;
 import br.edu.senai.fatesg.ads3.car_repair.core.validations.GenericValidation;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +29,8 @@ public class OrdemServicoValidation extends GenericValidation<OrdemServicoModel,
         if (entity.getVeiculo() == null || entity.getVeiculo().getId() == null) {
             throw new FieldValidationException("idVeiculo", "O veículo da ordem de serviço é obrigatório.");
         }
-        if (entity.getServico() == null || entity.getServico().getId() == null) {
-            throw new FieldValidationException("idServico", "O serviço da ordem é obrigatório.");
+        if (entity.getServicosExecutados() == null || entity.getServicosExecutados().isEmpty()) {
+            throw new FieldValidationException("idServicosExecutados", "A ordem de serviço deve ter ao menos um serviço.");
         }
     }
 
