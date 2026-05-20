@@ -1,5 +1,5 @@
 ﻿import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { Usuario } from '../../modelos/usuario';
@@ -25,7 +25,8 @@ export class UsuariosComponent implements OnInit {
 
   constructor(
     private readonly usuariosService: UsuariosService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +57,7 @@ export class UsuariosComponent implements OnInit {
     this.usuariosService.listar().subscribe({
       next: (usuarios) => {
         this.usuarios = usuarios;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar usuarios.');

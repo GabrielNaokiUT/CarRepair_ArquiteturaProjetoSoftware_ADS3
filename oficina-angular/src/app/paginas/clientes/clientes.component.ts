@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { validarCpfBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';
@@ -25,7 +25,8 @@ export class ClientesComponent implements OnInit {
 
   constructor(
     private readonly clientesService: ClientesService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +57,7 @@ export class ClientesComponent implements OnInit {
     this.clientesService.listar().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar clientes.');

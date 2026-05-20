@@ -1,8 +1,10 @@
 export interface Veiculo {
   id: string;
-  clienteId: string;
+  idCliente: string;
   placa: string;
   modelo: string;
   marca: string;
-  ano: number;
+  anoFabricacao: number;
+  cor: string;
+  quilometragem: number;
 }

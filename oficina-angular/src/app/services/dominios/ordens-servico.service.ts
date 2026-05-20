@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ApiBaseService } from '../../core/http/api-base.service';
 import { OrdemServico } from '../../modelos/ordem-servico';
@@ -19,10 +19,9 @@ export class OrdensServicoService extends ApiBaseService {
   }
 
   listar(): Observable<OrdemServico[]> {
-    return this.get<OrdemServico[]>(`${this.endpoint}/todos`).pipe(
-      tap((ordens) => {
-        this.ordens = [...ordens];
-      }),
+    return this.get<any>(`${this.endpoint}/todos`).pipe(
+      map((response) => (response?.content ?? response) as OrdemServico[]),
+      tap((ordens) => { this.ordens = [...ordens]; }),
       catchError((err) => throwError(() => err))
     );
   }

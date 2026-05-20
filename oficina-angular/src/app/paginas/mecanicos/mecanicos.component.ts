@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { validarTelefoneBasico } from '../../core/validacoes/campos.util';
@@ -25,7 +25,8 @@ export class MecanicosComponent implements OnInit {
 
   constructor(
     private readonly mecanicosService: MecanicosService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +57,7 @@ export class MecanicosComponent implements OnInit {
     this.mecanicosService.listar().subscribe({
       next: (mecanicos) => {
         this.mecanicos = mecanicos;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar mecânicos.');

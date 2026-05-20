@@ -15,7 +15,7 @@
         <div class="form-grid">
           <div class="form-group form-full">
             <label>Cliente</label>
-            <select name="clienteId" [(ngModel)]="novoVeiculo.clienteId" required>
+            <select name="idCliente" [(ngModel)]="novoVeiculo.idCliente" required>
               <option [ngValue]="0">Selecione um cliente</option>
               <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">{{ cliente.nome }}</option>
             </select>
@@ -34,7 +34,7 @@
           </div>
           <div class="form-group">
             <label>Ano</label>
-            <input name="ano" type="number" [(ngModel)]="novoVeiculo.ano" required placeholder="2024" />
+            <input name="anoFabricacao" type="number" [(ngModel)]="novoVeiculo.anoFabricacao" required placeholder="2024" />
           </div>
         </div>
         <ul class="erros" *ngIf="errosFormulario.length">
@@ -62,11 +62,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let veiculo of veiculos">
-            <td class="td-p">{{ nomeCliente(veiculo.clienteId) }}</td>
+            <td class="td-p">{{ nomeCliente(veiculo.idCliente) }}</td>
             <td>{{ veiculo.placa }}</td>
             <td>{{ veiculo.modelo }}</td>
             <td>{{ veiculo.marca }}</td>
-            <td>{{ veiculo.ano }}</td>
+            <td>{{ veiculo.anoFabricacao }}</td>
           </tr>
         </tbody>
       </table>

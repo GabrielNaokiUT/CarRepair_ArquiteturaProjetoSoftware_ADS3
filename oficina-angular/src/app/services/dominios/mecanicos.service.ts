@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ApiBaseService } from '../../core/http/api-base.service';
 import { Mecanico } from '../../modelos/mecanico';
@@ -19,13 +19,14 @@ export class MecanicosService extends ApiBaseService {
   }
 
   listar(): Observable<Mecanico[]> {
-    return this.get<Mecanico[]>(`${this.endpoint}/todos`).pipe(
-      tap((mecanicos) => {
-        this.mecanicos = [...mecanicos];
-      }),
+    return this.get<any>(`${this.endpoint}/todos`).pipe(
+      map((response) => (response?.content ?? response) as Mecanico[]),
+      tap((mecanicos) => { this.mecanicos = [...mecanicos]; }),
       catchError((err) => throwError(() => err))
     );
   }
+
+  get todos(): Mecanico[] { return this.mecanicos; }
 
   adicionar(mecanico: Omit<Mecanico, 'id'>): Observable<Mecanico> {
     return this.post<Mecanico, Omit<Mecanico, 'id'>>(this.endpoint, mecanico).pipe(
