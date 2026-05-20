@@ -8,6 +8,7 @@ import br.edu.senai.fatesg.ads3.car_repair.business.usuarios.UsuarioModel;
 import br.edu.senai.fatesg.ads3.car_repair.business.veiculos.VeiculoModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,10 +25,10 @@ import lombok.EqualsAndHashCode;
 public class OrdemServicoModel extends BaseModel {
 
     public enum StatusOrdemServico {
-        ABERTA,
-        EM_ANDAMENTO,
-        CONCLUIDA,
-        CANCELADA
+        @JsonProperty("aberta")     ABERTA,
+        @JsonProperty("em_execucao") EM_ANDAMENTO,
+        @JsonProperty("finalizada") CONCLUIDA,
+        @JsonProperty("cancelada")  CANCELADA
     }
 
     @Column(name = "descricao_problema", length = 200, nullable = false)
