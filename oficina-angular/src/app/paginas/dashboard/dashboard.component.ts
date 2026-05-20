@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
 import { ClientesService } from '../../services/dominios/clientes.service';
@@ -23,7 +23,8 @@ export class DashboardComponent implements OnInit {
     private readonly veiculosService: VeiculosService,
     private readonly mecanicosService: MecanicosService,
     private readonly ordensServicoService: OrdensServicoService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -38,8 +39,10 @@ export class DashboardComponent implements OnInit {
         this.totalVeiculos = veiculos.length;
         this.totalMecanicos = mecanicos.length;
         this.totalOrdensServico = ordens.length;
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        console.error(err);
         this.mensagemService.erro('Não foi possível carregar os indicadores do dashboard.');
       }
     });

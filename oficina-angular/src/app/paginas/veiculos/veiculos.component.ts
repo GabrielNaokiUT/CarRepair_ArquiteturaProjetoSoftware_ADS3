@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { validarPlacaBasica } from '../../core/validacoes/campos.util';
@@ -25,7 +25,8 @@ export class VeiculosComponent implements OnInit {
   constructor(
     private readonly clientesService: ClientesService,
     private readonly veiculosService: VeiculosService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -54,13 +55,14 @@ export class VeiculosComponent implements OnInit {
   }
 
   nomeCliente(clienteId: string): string {
-    return this.clientes.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
+    return this.clientesService.todos.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
   }
 
   private carregarClientes(): void {
     this.clientesService.listar().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar clientes para o cadastro de veículo.');
@@ -72,6 +74,7 @@ export class VeiculosComponent implements OnInit {
     this.veiculosService.listar().subscribe({
       next: (veiculos) => {
         this.veiculos = veiculos;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar veículos.');
@@ -83,7 +86,7 @@ export class VeiculosComponent implements OnInit {
     const erros: string[] = [];
     const anoAtual = new Date().getFullYear();
 
-    if (!this.novoVeiculo.clienteId) {
+    if (!this.novoVeiculo.idCliente) {
       erros.push('Selecione um cliente.');
     }
 
@@ -99,7 +102,7 @@ export class VeiculosComponent implements OnInit {
       erros.push('Informe a marca do veículo.');
     }
 
-    if (this.novoVeiculo.ano < 1950 || this.novoVeiculo.ano > anoAtual) {
+    if (this.novoVeiculo.anoFabricacao < 1950 || this.novoVeiculo.anoFabricacao > anoAtual) {
       erros.push(`Informe um ano entre 1950 e ${anoAtual}.`);
     }
 
@@ -108,11 +111,13 @@ export class VeiculosComponent implements OnInit {
 
   private criarVeiculoVazio(): Omit<Veiculo, 'id'> {
     return {
-      clienteId: '',
+      idCliente: '',
       placa: '',
       modelo: '',
       marca: '',
-      ano: new Date().getFullYear()
+      anoFabricacao: new Date().getFullYear(),
+      cor: '',
+      quilometragem: 0
     };
   }
 }

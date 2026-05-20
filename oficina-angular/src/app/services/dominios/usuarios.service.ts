@@ -1,7 +1,7 @@
 ﻿import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { ApiBaseService } from '../../core/http/api-base.service';
 import { Usuario } from '../../modelos/usuario';
 
@@ -17,13 +17,14 @@ export class UsuariosService extends ApiBaseService {
   }
 
   listar(): Observable<Usuario[]> {
-    return this.get<Usuario[]>(`${this.endpoint}/todos`).pipe(
-      tap((usuarios) => {
-        this.usuarios = [...usuarios];
-      }),
+    return this.get<any>(`${this.endpoint}/todos`).pipe(
+      map((response) => (response?.content ?? response) as Usuario[]),
+      tap((usuarios) => { this.usuarios = [...usuarios]; }),
       catchError((err) => throwError(() => err))
     );
   }
+
+  get todos(): Usuario[] { return this.usuarios; }
 
   adicionar(usuario: Omit<Usuario, 'id'>): Observable<Usuario> {
     return this.post<Usuario, Omit<Usuario, 'id'>>(this.endpoint, usuario).pipe(

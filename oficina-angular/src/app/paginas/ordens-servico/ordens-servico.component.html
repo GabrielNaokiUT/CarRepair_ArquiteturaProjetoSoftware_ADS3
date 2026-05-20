@@ -19,7 +19,7 @@
         <div class="form-grid form-grid-2">
           <div class="form-group">
             <label>Cliente</label>
-            <select name="clienteId" [(ngModel)]="novaOrdem.clienteId" required>
+            <select name="idCliente" [(ngModel)]="novaOrdem.idCliente" required>
               <option [ngValue]="0">Selecione</option>
               <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">{{ cliente.nome }}</option>
             </select>
@@ -27,7 +27,7 @@
 
           <div class="form-group">
             <label>Veículo</label>
-            <select name="veiculoId" [(ngModel)]="novaOrdem.veiculoId" required>
+            <select name="idVeiculo" [(ngModel)]="novaOrdem.idVeiculo" required>
               <option [ngValue]="0">Selecione</option>
               <option *ngFor="let veiculo of veiculos" [ngValue]="veiculo.id">
                 {{ veiculo.placa }} - {{ veiculo.modelo }}
@@ -37,7 +37,7 @@
 
           <div class="form-group">
             <label>Usuário Responsável</label>
-            <select name="usuarioResponsavelId" [(ngModel)]="novaOrdem.usuarioResponsavelId" required>
+            <select name="idUsuarioResponsavel" [(ngModel)]="novaOrdem.idUsuarioResponsavel" required>
               <option [ngValue]="0">Selecione</option>
               <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">{{ usuario.nome }}</option>
             </select>
@@ -45,7 +45,7 @@
 
           <div class="form-group">
             <label>Mecânico Responsável</label>
-            <select name="mecanicoResponsavelId" [(ngModel)]="novaOrdem.mecanicoResponsavelId" required>
+            <select name="idMecanicoResponsavel" [(ngModel)]="novaOrdem.idMecanicoResponsavel" required>
               <option [ngValue]="0">Selecione</option>
               <option *ngFor="let mecanico of mecanicos" [ngValue]="mecanico.id">{{ mecanico.nome }}</option>
             </select>
@@ -66,29 +66,26 @@
           <div class="fieldset-title">Serviços Executados</div>
           <div class="inline-row">
             <div class="form-group">
-              <label>Descrição</label>
-              <input name="servicoDescricao" [(ngModel)]="novoServico.descricao" placeholder="Ex: Troca de óleo" />
-            </div>
-            <div class="form-group form-group-sm">
-              <label>Valor (R$)</label>
-              <input name="servicoValor" type="number" [(ngModel)]="novoServico.valor" placeholder="0,00" />
-            </div>
-            <div class="form-group form-group-sm">
-              <label>Tempo (h)</label>
-              <input name="servicoTempo" type="number" [(ngModel)]="novoServico.tempoExecucaoHoras" placeholder="0" />
+              <label>Serviço</label>
+              <select name="servicoSelecionadoId" [(ngModel)]="servicoSelecionadoId">
+                <option value="">Selecione um serviço</option>
+                <option *ngFor="let servico of servicos" [ngValue]="servico.id">
+                  {{ servico.nome }} — R$ {{ servico.preco | number: '1.2-2' }}
+                </option>
+              </select>
             </div>
             <div class="form-group form-group-action">
               <label>&nbsp;</label>
               <button type="button" class="btn-add" (click)="adicionarServico()">+ Adicionar</button>
             </div>
           </div>
-          <ul class="temp-list" *ngIf="servicosTemp.length">
-            <li *ngFor="let servico of servicosTemp">
-              <span class="temp-nome">{{ servico.descricao }}</span>
-              <span class="temp-meta">R$ {{ servico.valor | number: '1.2-2' }} &bull; {{ servico.tempoExecucaoHoras }}h</span>
+          <ul class="temp-list" *ngIf="novaOrdem.idServicosExecutados.length">
+            <li *ngFor="let id of novaOrdem.idServicosExecutados">
+              <span class="temp-nome">{{ nomeServico(id) }}</span>
+              <button type="button" class="btn-remover" (click)="removerServico(id)">×</button>
             </li>
           </ul>
-          <div class="temp-empty" *ngIf="!servicosTemp.length">Nenhum serviço adicionado ainda.</div>
+          <div class="temp-empty" *ngIf="!novaOrdem.idServicosExecutados.length">Nenhum serviço adicionado ainda.</div>
         </div>
 
         <div class="fieldset-card">
@@ -141,26 +138,26 @@
           <div class="os-header">
             <div class="os-id">OS #{{ ordem.id }}</div>
             <span class="badge" [ngClass]="{
-              'b-aberta':      ordem.status === 'aberta',
-              'b-execucao':    ordem.status === 'em_execucao',
-              'b-concluida':   ordem.status === 'concluida',
-              'b-cancelada':   ordem.status === 'cancelada'
-            }">{{ ordem.status }}</span>
+              'b-aberta':    ordem.statusOrdemServico === 'aberta',
+              'b-execucao':  ordem.statusOrdemServico === 'em_execucao',
+              'b-fin':       ordem.statusOrdemServico === 'finalizada',
+              'b-cancelada': ordem.statusOrdemServico === 'cancelada'
+            }">{{ ordem.statusOrdemServico }}</span>
           </div>
 
           <div class="os-body">
             <div class="os-info-grid">
               <div class="os-info-item">
                 <span class="os-info-label">Cliente</span>
-                <span class="os-info-val td-p">{{ nomeCliente(ordem.clienteId) }}</span>
+                <span class="os-info-val td-p">{{ nomeCliente(ordem.idCliente) }}</span>
               </div>
               <div class="os-info-item">
                 <span class="os-info-label">Veículo</span>
-                <span class="os-info-val">{{ dadosVeiculo(ordem.veiculoId) }}</span>
+                <span class="os-info-val">{{ dadosVeiculo(ordem.idVeiculo) }}</span>
               </div>
               <div class="os-info-item">
                 <span class="os-info-label">Mecânico</span>
-                <span class="os-info-val">{{ nomeMecanico(ordem.mecanicoResponsavelId) }}</span>
+                <span class="os-info-val">{{ nomeMecanico(ordem.idMecanicoResponsavel) }}</span>
               </div>
               <div class="os-info-item os-info-full">
                 <span class="os-info-label">Problema</span>
@@ -168,21 +165,17 @@
               </div>
             </div>
 
-            <div class="os-sublists" *ngIf="ordem.servicosExecutados?.length || ordem.pecasAplicadas?.length">
-              <div class="os-sublist" *ngIf="ordem.servicosExecutados?.length">
-                <div class="os-sublist-title">Serviços</div>
+            <div class="os-sublists" *ngIf="ordem.idServicosExecutados?.length || ordem.idPecasAplicadas?.length">
+              <div class="os-sublist" *ngIf="ordem.idServicosExecutados?.length">
+                <div class="os-sublist-title">Serviços ({{ ordem.idServicosExecutados.length }})</div>
                 <ul>
-                  <li *ngFor="let servico of ordem.servicosExecutados">
-                    {{ servico.descricao }} &bull; R$ {{ servico.valor | number: '1.2-2' }} &bull; {{ servico.tempoExecucaoHoras }}h
-                  </li>
+                  <li *ngFor="let id of ordem.idServicosExecutados">{{ id }}</li>
                 </ul>
               </div>
-              <div class="os-sublist" *ngIf="ordem.pecasAplicadas?.length">
-                <div class="os-sublist-title">Peças</div>
+              <div class="os-sublist" *ngIf="ordem.idPecasAplicadas?.length">
+                <div class="os-sublist-title">Peças ({{ ordem.idPecasAplicadas.length }})</div>
                 <ul>
-                  <li *ngFor="let peca of ordem.pecasAplicadas">
-                    {{ peca.descricao }} &bull; {{ peca.quantidade }}x &bull; R$ {{ peca.valorUnitario | number: '1.2-2' }}
-                  </li>
+                  <li *ngFor="let id of ordem.idPecasAplicadas">{{ id }}</li>
                 </ul>
               </div>
             </div>
