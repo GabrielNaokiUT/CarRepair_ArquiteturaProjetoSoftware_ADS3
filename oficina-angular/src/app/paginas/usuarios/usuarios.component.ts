@@ -16,13 +16,10 @@ export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   errosFormulario: string[] = [];
   formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novoUsuario: Omit<Usuario, 'id' | 'active'> = {
-    nome: '',
-    login: '',
-    email: '',
-    perfil: 'atendente'
-  };
+  novoUsuario: Omit<Usuario, 'id' | 'active'> = this.usuarioVazio();
 
   constructor(
     private readonly usuariosService: UsuariosService,
@@ -38,7 +35,32 @@ export class UsuariosComponent implements OnInit {
     this.formAberto = !this.formAberto;
     if (!this.formAberto) {
       this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novoUsuario = this.usuarioVazio();
     }
+  }
+
+  editarUsuario(usuario: Usuario): void {
+    this.novoUsuario = { nome: usuario.nome, login: usuario.login, email: usuario.email, perfil: usuario.perfil };
+    this.idEditando = usuario.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.errosFormulario = [];
+  }
+
+  excluirUsuario(id: string): void {
+    if (!window.confirm('Deseja realmente excluir este usuário?')) return;
+    this.usuariosService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Usuário excluído com sucesso.');
+        this.carregarUsuarios();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir o usuário.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   salvarUsuario(form: NgForm): void {
@@ -49,11 +71,18 @@ export class UsuariosComponent implements OnInit {
       return;
     }
 
-    this.usuariosService.adicionar(this.novoUsuario).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.usuariosService.atualizar(this.idEditando, { ...this.novoUsuario })
+      : this.usuariosService.adicionar({ ...this.novoUsuario });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Usuário salvo com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Usuário atualizado com sucesso.' : 'Usuário salvo com sucesso.');
         form.resetForm({ nome: '', login: '', email: '', perfil: 'atendente' });
         this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.novoUsuario = this.usuarioVazio();
         this.carregarUsuarios();
       },
       error: (err) => {
@@ -73,6 +102,10 @@ export class UsuariosComponent implements OnInit {
         this.mensagemService.erro('Falha ao carregar usuários.');
       }
     });
+  }
+
+  private usuarioVazio(): Omit<Usuario, 'id' | 'active'> {
+    return { nome: '', login: '', email: '', perfil: 'atendente' };
   }
 
   private validarFormulario(): string[] {

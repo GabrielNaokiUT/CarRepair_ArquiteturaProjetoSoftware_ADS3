@@ -14,7 +14,7 @@
   <div class="inner-content">
     <div class="form-wrapper" [class.open]="formAberto">
       <div class="form-card">
-        <div class="form-title">Cadastrar usuário</div>
+        <div class="form-title">{{ editando ? 'Editar usuário' : 'Cadastrar usuário' }}</div>
         <form #formUsuario="ngForm" (ngSubmit)="salvarUsuario(formUsuario)">
           <div class="form-grid">
             <div class="form-group">
@@ -62,6 +62,7 @@
             <th>E-mail</th>
             <th>Perfil</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +75,12 @@
               <span class="badge" [class.b-ativo]="usuario.active" [class.b-inativo]="!usuario.active">
                 {{ usuario.active ? 'Ativo' : 'Inativo' }}
               </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarUsuario(usuario)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirUsuario(usuario.id)">✕ Excluir</button>
+              </div>
             </td>
           </tr>
         </tbody>

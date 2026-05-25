@@ -14,7 +14,7 @@
   <div class="inner-content">
     <div class="form-wrapper" [class.open]="formAberto">
       <div class="form-card">
-        <div class="form-title">Abrir ordem de serviço</div>
+        <div class="form-title">{{ editando ? 'Editar ordem de serviço' : 'Abrir ordem de serviço' }}</div>
         <form #formOs="ngForm" (ngSubmit)="salvarOrdemServico(formOs)">
           <div class="form-grid form-grid-2">
             <div class="form-group">
@@ -90,7 +90,7 @@
             <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
           </ul>
           <div class="form-actions">
-            <button type="submit" class="btn-save">Abrir OS</button>
+            <button type="submit" class="btn-save">{{ editando ? 'Salvar alterações' : 'Abrir OS' }}</button>
             <button type="button" class="btn-cancel-form" (click)="toggleForm()">Cancelar</button>
           </div>
         </form>
@@ -111,6 +111,7 @@
             <th>Descrição</th>
             <th>Status</th>
             <th>Abertura</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -122,6 +123,12 @@
             <td>{{ ordem.descricaoProblema }}</td>
             <td><span [ngClass]="badgeClassStatus(ordem.statusOrdemServico)">{{ labelStatus(ordem.statusOrdemServico) }}</span></td>
             <td>{{ ordem.dataAbertura | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarOrdem(ordem)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirOrdem(ordem.id)">✕ Excluir</button>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

@@ -36,4 +36,18 @@ export class ClientesService extends ApiBaseService {
       catchError((err) => throwError(() => err))
     );
   }
+
+  atualizar(id: string, cliente: Omit<Cliente, 'id' | 'active'>): Observable<Cliente> {
+    return this.put<Cliente, Omit<Cliente, 'id' | 'active'>>(this.endpoint, id, cliente).pipe(
+      tap((atualizado) => { this.clientes = this.clientes.map(c => c.id === id ? atualizado : c); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.clientes = this.clientes.filter(c => c.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

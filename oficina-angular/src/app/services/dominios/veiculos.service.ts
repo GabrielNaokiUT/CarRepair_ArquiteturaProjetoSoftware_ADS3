@@ -37,4 +37,17 @@ export class VeiculosService extends ApiBaseService {
     );
   }
 
+  atualizar(id: string, veiculo: Omit<Veiculo, 'id' | 'active'>): Observable<Veiculo> {
+    return this.put<Veiculo, Omit<Veiculo, 'id' | 'active'>>(this.endpoint, id, veiculo).pipe(
+      tap((atualizado) => { this.veiculos = this.veiculos.map(v => v.id === id ? atualizado : v); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.veiculos = this.veiculos.filter(v => v.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

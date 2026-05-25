@@ -37,4 +37,17 @@ export class MecanicosService extends ApiBaseService {
     );
   }
 
+  atualizar(id: string, mecanico: Omit<Mecanico, 'id' | 'active'>): Observable<Mecanico> {
+    return this.put<Mecanico, Omit<Mecanico, 'id' | 'active'>>(this.endpoint, id, mecanico).pipe(
+      tap((atualizado) => { this.mecanicos = this.mecanicos.map(m => m.id === id ? atualizado : m); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.mecanicos = this.mecanicos.filter(m => m.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

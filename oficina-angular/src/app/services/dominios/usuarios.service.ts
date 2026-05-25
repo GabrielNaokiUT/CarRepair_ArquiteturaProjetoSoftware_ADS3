@@ -34,4 +34,18 @@ export class UsuariosService extends ApiBaseService {
       catchError((err) => throwError(() => err))
     );
   }
+
+  atualizar(id: string, usuario: Omit<Usuario, 'id' | 'active'>): Observable<Usuario> {
+    return this.put<Usuario, Omit<Usuario, 'id' | 'active'>>(this.endpoint, id, usuario).pipe(
+      tap((atualizado) => { this.usuarios = this.usuarios.map(u => u.id === id ? atualizado : u); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.usuarios = this.usuarios.filter(u => u.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

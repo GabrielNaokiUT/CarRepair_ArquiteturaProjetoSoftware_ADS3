@@ -646,3 +646,36 @@ tbody td { padding: 1rem 1.5rem; font-size: 0.845rem; color: var(--muted); }
 .readme-code-block { padding: 1.1rem 1.25rem; background: #faf8f3; }
 .code-line { font-family: monospace; font-size: 0.8rem; color: var(--p1); line-height: 1.8; }
 .code-comment { color: var(--muted); }
+
+/* ===== ACTION BUTTONS (shared across inner pages) ===== */
+.td-acoes { display: flex; gap: 0.4rem; align-items: center; white-space: nowrap; }
+
+.btn-edit {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--p1);
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.btn-edit:hover { border-color: var(--accent); color: var(--accent-dark); }
+
+.btn-delete {
+  background: transparent;
+  border: 1px solid rgba(139,20,20,0.18);
+  color: #8b1414;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.btn-delete:hover { background: rgba(139,20,20,0.06); border-color: rgba(139,20,20,0.32); }

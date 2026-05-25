@@ -33,4 +33,18 @@ export class ServicosService extends ApiBaseService {
       catchError((err) => throwError(() => err))
     );
   }
+
+  atualizar(id: string, servico: Omit<Servico, 'id' | 'active'>): Observable<Servico> {
+    return this.put<Servico, Omit<Servico, 'id' | 'active'>>(this.endpoint, id, servico).pipe(
+      tap((atualizado) => { this.servicos = this.servicos.map(s => s.id === id ? atualizado : s); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.servicos = this.servicos.filter(s => s.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

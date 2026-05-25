@@ -32,18 +32,10 @@ export class OrdensServicoComponent implements OnInit {
   ordensServico: OrdemServico[] = [];
   errosFormulario: string[] = [];
   formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novaOrdem: Omit<OrdemServico, 'id' | 'active'> = {
-    idCliente: '',
-    idVeiculo: '',
-    idUsuarioResponsavel: '',
-    idMecanicoResponsavel: '',
-    dataAbertura: new Date().toISOString().slice(0, 10),
-    statusOrdemServico: 'aberta',
-    descricaoProblema: '',
-    idServicosExecutados: [],
-    idPecasAplicadas: []
-  };
+  novaOrdem: Omit<OrdemServico, 'id' | 'active'> = this.ordemVazia();
 
   servicoSelecionadoId = '';
 
@@ -86,7 +78,44 @@ export class OrdensServicoComponent implements OnInit {
     this.formAberto = !this.formAberto;
     if (!this.formAberto) {
       this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novaOrdem = this.ordemVazia();
+      this.servicoSelecionadoId = '';
     }
+  }
+
+  editarOrdem(ordem: OrdemServico): void {
+    this.novaOrdem = {
+      idCliente: ordem.idCliente,
+      idVeiculo: ordem.idVeiculo,
+      idUsuarioResponsavel: ordem.idUsuarioResponsavel,
+      idMecanicoResponsavel: ordem.idMecanicoResponsavel,
+      dataAbertura: ordem.dataAbertura,
+      statusOrdemServico: ordem.statusOrdemServico,
+      descricaoProblema: ordem.descricaoProblema,
+      idServicosExecutados: [...ordem.idServicosExecutados],
+      idPecasAplicadas: [...ordem.idPecasAplicadas]
+    };
+    this.idEditando = ordem.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.servicoSelecionadoId = '';
+    this.errosFormulario = [];
+  }
+
+  excluirOrdem(id: string): void {
+    if (!window.confirm('Deseja realmente excluir esta ordem de serviço?')) return;
+    this.ordensServicoService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Ordem de serviço excluída com sucesso.');
+        this.carregarOrdens();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir a ordem de serviço.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   adicionarServico(): void {
@@ -103,7 +132,7 @@ export class OrdensServicoComponent implements OnInit {
   }
 
   nomeServico(id: string): string {
-    return this.servicosService.todos.find((s) => s.id === id)?.nome ?? id;
+    return this.servicos.find((s) => s.id === id)?.nome ?? id;
   }
 
   removerServico(id: string): void {
@@ -118,9 +147,13 @@ export class OrdensServicoComponent implements OnInit {
       return;
     }
 
-    this.ordensServicoService.adicionar({ ...this.novaOrdem }).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.ordensServicoService.atualizar(this.idEditando, { ...this.novaOrdem })
+      : this.ordensServicoService.adicionar({ ...this.novaOrdem });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Ordem de serviço cadastrada com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Ordem de serviço atualizada com sucesso.' : 'Ordem de serviço cadastrada com sucesso.');
         form.resetForm({
           idCliente: '',
           idVeiculo: '',
@@ -129,29 +162,31 @@ export class OrdensServicoComponent implements OnInit {
           dataAbertura: new Date().toISOString().slice(0, 10),
           descricaoProblema: ''
         });
-        this.novaOrdem.idServicosExecutados = [];
-        this.novaOrdem.idPecasAplicadas = [];
+        this.novaOrdem = this.ordemVazia();
         this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.servicoSelecionadoId = '';
         this.carregarOrdens();
       },
       error: (err) => {
-        const msg: string = err?.error?.message ?? 'Não foi possível cadastrar a ordem de serviço no momento.';
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar a ordem de serviço no momento.';
         this.mensagemService.erro(msg);
       }
     });
   }
 
   nomeCliente(clienteId: string): string {
-    return this.clientesService.todos.find((c) => c.id === clienteId)?.nome ?? clienteId;
+    return this.clientes.find((c) => c.id === clienteId)?.nome ?? clienteId;
   }
 
   nomeMecanico(mecanicoId: string): string {
-    return this.mecanicosService.todos.find((m) => m.id === mecanicoId)?.nome ?? mecanicoId;
+    return this.mecanicos.find((m) => m.id === mecanicoId)?.nome ?? mecanicoId;
   }
 
   dadosVeiculo(veiculoId: string): string {
-    const veiculo = this.veiculosService.todos.find((v) => v.id === veiculoId);
-    return veiculo ? `${veiculo.placa}` : veiculoId;
+    const veiculo = this.veiculos.find((v) => v.id === veiculoId);
+    return veiculo ? veiculo.placa : veiculoId;
   }
 
   badgeClassStatus(status: string): Record<string, boolean> {
@@ -172,6 +207,20 @@ export class OrdensServicoComponent implements OnInit {
       cancelada: 'Cancelada'
     };
     return map[status] ?? status;
+  }
+
+  private ordemVazia(): Omit<OrdemServico, 'id' | 'active'> {
+    return {
+      idCliente: '',
+      idVeiculo: '',
+      idUsuarioResponsavel: '',
+      idMecanicoResponsavel: '',
+      dataAbertura: new Date().toISOString().slice(0, 10),
+      statusOrdemServico: 'aberta',
+      descricaoProblema: '',
+      idServicosExecutados: [],
+      idPecasAplicadas: []
+    };
   }
 
   private carregarOrdens(): void {

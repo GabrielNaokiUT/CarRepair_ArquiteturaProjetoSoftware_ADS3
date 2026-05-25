@@ -1,6 +1,14 @@
-<section class="mensagens" *ngIf="mensagens$ | async as mensagens">
-  <article class="mensagem" *ngFor="let mensagem of mensagens" [ngClass]="mensagem.tipo">
-    <span>{{ mensagem.texto }}</span>
-    <button type="button" (click)="fecharMensagem(mensagem.id)">×</button>
-  </article>
-</section>
+<div class="toast-container">
+  <ng-container *ngIf="mensagens$ | async as mensagens">
+    <div class="toast" *ngFor="let mensagem of mensagens" [ngClass]="mensagem.tipo">
+      <div class="toast-icon">
+        <span *ngIf="mensagem.tipo === 'sucesso'">✓</span>
+        <span *ngIf="mensagem.tipo === 'erro'">✕</span>
+        <span *ngIf="mensagem.tipo === 'aviso'">!</span>
+        <span *ngIf="mensagem.tipo === 'info'">i</span>
+      </div>
+      <span class="toast-text">{{ mensagem.texto }}</span>
+      <button class="toast-close" type="button" (click)="fecharMensagem(mensagem.id)">×</button>
+    </div>
+  </ng-container>
+</div>
