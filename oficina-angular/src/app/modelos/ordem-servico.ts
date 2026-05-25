@@ -23,4 +23,5 @@ export interface OrdemServico {
   descricaoProblema: string;
   idServicosExecutados: string[];
   idPecasAplicadas: string[];
+  active: boolean;
 }

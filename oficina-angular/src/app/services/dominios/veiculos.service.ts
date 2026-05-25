@@ -28,8 +28,8 @@ export class VeiculosService extends ApiBaseService {
 
   get todos(): Veiculo[] { return this.veiculos; }
 
-  adicionar(veiculo: Omit<Veiculo, 'id'>): Observable<Veiculo> {
-    return this.post<Veiculo, Omit<Veiculo, 'id'>>(this.endpoint, veiculo).pipe(
+  adicionar(veiculo: Omit<Veiculo, 'id' | 'active'>): Observable<Veiculo> {
+    return this.post<Veiculo, Omit<Veiculo, 'id' | 'active'>>(this.endpoint, veiculo).pipe(
       tap((veiculoCriado) => {
         this.veiculos = [...this.veiculos, veiculoCriado];
       }),

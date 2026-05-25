@@ -1,4 +1,4 @@
-﻿import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
@@ -15,8 +15,9 @@ import { MensagemService } from '../../shared/mensagens/mensagem.service';
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
 
-  novoUsuario: Omit<Usuario, 'id'> = {
+  novoUsuario: Omit<Usuario, 'id' | 'active'> = {
     nome: '',
     login: '',
     email: '',
@@ -33,22 +34,31 @@ export class UsuariosComponent implements OnInit {
     this.carregarUsuarios();
   }
 
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+    }
+  }
+
   salvarUsuario(form: NgForm): void {
     this.errosFormulario = this.validarFormulario();
 
     if (form.invalid || this.errosFormulario.length) {
-      this.mensagemService.aviso('Revise os campos obrigatorios antes de salvar o usuario.');
+      this.mensagemService.aviso('Revise os campos obrigatórios antes de salvar o usuário.');
       return;
     }
 
     this.usuariosService.adicionar(this.novoUsuario).subscribe({
       next: () => {
-        this.mensagemService.sucesso('Usuario salvo com sucesso.');
+        this.mensagemService.sucesso('Usuário salvo com sucesso.');
         form.resetForm({ nome: '', login: '', email: '', perfil: 'atendente' });
+        this.formAberto = false;
         this.carregarUsuarios();
       },
-      error: () => {
-        this.mensagemService.erro('Nao foi possivel salvar o usuario no momento.');
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar o usuário no momento.';
+        this.mensagemService.erro(msg);
       }
     });
   }
@@ -60,7 +70,7 @@ export class UsuariosComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.mensagemService.erro('Falha ao carregar usuarios.');
+        this.mensagemService.erro('Falha ao carregar usuários.');
       }
     });
   }
@@ -69,19 +79,19 @@ export class UsuariosComponent implements OnInit {
     const erros: string[] = [];
 
     if (!this.novoUsuario.nome.trim()) {
-      erros.push('Informe o nome do usuario.');
+      erros.push('Informe o nome do usuário.');
     }
 
     if (!this.novoUsuario.login.trim()) {
-      erros.push('Informe o login do usuario.');
+      erros.push('Informe o login do usuário.');
     }
 
     if (!this.novoUsuario.email.trim() || !this.novoUsuario.email.includes('@')) {
-      erros.push('Informe um e-mail valido.');
+      erros.push('Informe um e-mail válido.');
     }
 
     if (!this.novoUsuario.perfil) {
-      erros.push('Selecione o perfil do usuario.');
+      erros.push('Selecione o perfil do usuário.');
     }
 
     return erros;

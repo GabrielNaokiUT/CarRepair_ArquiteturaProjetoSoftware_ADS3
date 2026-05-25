@@ -16,10 +16,12 @@ import { MensagemService } from '../../shared/mensagens/mensagem.service';
 export class ClientesComponent implements OnInit {
   clientes: Cliente[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
 
-  novoCliente: Omit<Cliente, 'id'> = {
+  novoCliente: Omit<Cliente, 'id' | 'active'> = {
     nome: '',
     cpf: '',
+    email: '',
     telefone: ''
   };
 
@@ -33,6 +35,13 @@ export class ClientesComponent implements OnInit {
     this.carregarClientes();
   }
 
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+    }
+  }
+
   salvarCliente(form: NgForm): void {
     this.errosFormulario = this.validarFormulario();
 
@@ -44,11 +53,13 @@ export class ClientesComponent implements OnInit {
     this.clientesService.adicionar(this.novoCliente).subscribe({
       next: () => {
         this.mensagemService.sucesso('Cliente salvo com sucesso.');
-        form.resetForm({ nome: '', cpf: '', telefone: '' });
+        form.resetForm({ nome: '', cpf: '', email: '', telefone: '' });
+        this.formAberto = false;
         this.carregarClientes();
       },
-      error: () => {
-        this.mensagemService.erro('Não foi possível salvar o cliente no momento.');
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar o cliente no momento.';
+        this.mensagemService.erro(msg);
       }
     });
   }
@@ -73,7 +84,7 @@ export class ClientesComponent implements OnInit {
     }
 
     if (!validarCpfBasico(this.novoCliente.cpf)) {
-      erros.push('Informe um CPF válido com 11 dígitos.');
+      erros.push('CPF inválido. Verifique os 11 dígitos e os dígitos verificadores.');
     }
 
     if (!validarTelefoneBasico(this.novoCliente.telefone)) {

@@ -28,8 +28,8 @@ export class MecanicosService extends ApiBaseService {
 
   get todos(): Mecanico[] { return this.mecanicos; }
 
-  adicionar(mecanico: Omit<Mecanico, 'id'>): Observable<Mecanico> {
-    return this.post<Mecanico, Omit<Mecanico, 'id'>>(this.endpoint, mecanico).pipe(
+  adicionar(mecanico: Omit<Mecanico, 'id' | 'active'>): Observable<Mecanico> {
+    return this.post<Mecanico, Omit<Mecanico, 'id' | 'active'>>(this.endpoint, mecanico).pipe(
       tap((mecanicoCriado) => {
         this.mecanicos = [...this.mecanicos, mecanicoCriado];
       }),

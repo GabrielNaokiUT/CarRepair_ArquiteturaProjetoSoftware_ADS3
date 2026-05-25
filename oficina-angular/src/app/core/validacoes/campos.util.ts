@@ -2,12 +2,22 @@ export function somenteDigitos(valor: string): string {
   return valor.replace(/\D/g, '');
 }
 
-/**
- * Validação simplificada: verifica apenas formato com 11 dígitos.
- * Não aplica cálculo dos dígitos verificadores do CPF.
- */
 export function validarCpfBasico(cpf: string): boolean {
-  return /^\d{11}$/.test(somenteDigitos(cpf));
+  const d = somenteDigitos(cpf);
+  if (d.length !== 11) return false;
+  if (/^(\d)\1+$/.test(d)) return false;
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(d[i]) * (10 - i);
+  let dig1 = 11 - (soma % 11);
+  if (dig1 >= 10) dig1 = 0;
+  if (dig1 !== parseInt(d[9])) return false;
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(d[i]) * (11 - i);
+  let dig2 = 11 - (soma % 11);
+  if (dig2 >= 10) dig2 = 0;
+  return dig2 === parseInt(d[10]);
 }
 
 export function validarTelefoneBasico(telefone: string): boolean {

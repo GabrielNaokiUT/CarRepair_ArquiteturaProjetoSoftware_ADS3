@@ -28,8 +28,8 @@ export class ClientesService extends ApiBaseService {
 
   get todos(): Cliente[] { return this.clientes; }
 
-  adicionar(cliente: Omit<Cliente, 'id'>): Observable<Cliente> {
-    return this.post<Cliente, Omit<Cliente, 'id'>>(this.endpoint, cliente).pipe(
+  adicionar(cliente: Omit<Cliente, 'id' | 'active'>): Observable<Cliente> {
+    return this.post<Cliente, Omit<Cliente, 'id' | 'active'>>(this.endpoint, cliente).pipe(
       tap((clienteCriado) => {
         this.clientes = [...this.clientes, clienteCriado];
       }),

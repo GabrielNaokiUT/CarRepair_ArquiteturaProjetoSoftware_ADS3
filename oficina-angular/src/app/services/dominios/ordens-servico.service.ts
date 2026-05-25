@@ -26,8 +26,8 @@ export class OrdensServicoService extends ApiBaseService {
     );
   }
 
-  adicionar(ordem: Omit<OrdemServico, 'id'>): Observable<OrdemServico> {
-    return this.post<OrdemServico, Omit<OrdemServico, 'id'>>(this.endpoint, ordem).pipe(
+  adicionar(ordem: Omit<OrdemServico, 'id' | 'active'>): Observable<OrdemServico> {
+    return this.post<OrdemServico, Omit<OrdemServico, 'id' | 'active'>>(this.endpoint, ordem).pipe(
       tap((ordemCriada) => {
         this.ordens = [...this.ordens, ordemCriada];
         // this.proximoId = this.calcularProximoId(this.ordens);

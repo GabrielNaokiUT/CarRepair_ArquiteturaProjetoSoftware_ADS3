@@ -7,4 +7,5 @@ export interface Veiculo {
   anoFabricacao: number;
   cor: string;
   quilometragem: number;
+  active: boolean;
 }

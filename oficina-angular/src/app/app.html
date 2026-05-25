@@ -2,12 +2,13 @@
   <nav class="navbar" *ngIf="!isPreview">
     <a class="nav-logo" routerLink="/dashboard">Car<span>Repair</span></a>
     <div class="nav-links">
-      <a routerLink="/dashboard" routerLinkActive="ativo">Dashboard</a>
+      <a routerLink="/dashboard" routerLinkActive="ativo">Home</a>
       <a routerLink="/clientes" routerLinkActive="ativo">Clientes</a>
       <a routerLink="/veiculos" routerLinkActive="ativo">Veículos</a>
       <a routerLink="/mecanicos" routerLinkActive="ativo">Mecânicos</a>
+      <a routerLink="/servicos" routerLinkActive="ativo">Serviços</a>
       <a routerLink="/ordens-servico" routerLinkActive="ativo">Ordens de Serviço</a>
-      <a routerLink="/usuarios" routerLinkActive="ativo">Usuários</a>
+      <a routerLink="/usuarios" routerLinkActive="ativo" class="nav-cta">Usuários</a>
     </div>
   </nav>
   <main class="conteudo">
