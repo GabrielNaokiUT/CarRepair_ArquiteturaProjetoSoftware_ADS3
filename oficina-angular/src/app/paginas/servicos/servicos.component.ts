@@ -16,12 +16,10 @@ export class ServicosComponent implements OnInit {
   servicos: Servico[] = [];
   errosFormulario: string[] = [];
   formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novoServico: Omit<Servico, 'id' | 'active'> = {
-    nome: '',
-    descricao: '',
-    preco: 0
-  };
+  novoServico: Omit<Servico, 'id' | 'active'> = this.servicoVazio();
 
   constructor(
     private readonly servicosService: ServicosService,
@@ -37,7 +35,32 @@ export class ServicosComponent implements OnInit {
     this.formAberto = !this.formAberto;
     if (!this.formAberto) {
       this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novoServico = this.servicoVazio();
     }
+  }
+
+  editarServico(servico: Servico): void {
+    this.novoServico = { nome: servico.nome, descricao: servico.descricao, preco: servico.preco };
+    this.idEditando = servico.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.errosFormulario = [];
+  }
+
+  excluirServico(id: string): void {
+    if (!window.confirm('Deseja realmente excluir este serviço?')) return;
+    this.servicosService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Serviço excluído com sucesso.');
+        this.carregarServicos();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir o serviço.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   salvarServico(form: NgForm): void {
@@ -48,11 +71,18 @@ export class ServicosComponent implements OnInit {
       return;
     }
 
-    this.servicosService.adicionar(this.novoServico).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.servicosService.atualizar(this.idEditando, { ...this.novoServico })
+      : this.servicosService.adicionar({ ...this.novoServico });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Serviço salvo com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Serviço atualizado com sucesso.' : 'Serviço salvo com sucesso.');
         form.resetForm({ nome: '', descricao: '', preco: 0 });
         this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.novoServico = this.servicoVazio();
         this.carregarServicos();
       },
       error: (err) => {
@@ -72,6 +102,10 @@ export class ServicosComponent implements OnInit {
         this.mensagemService.erro('Falha ao carregar serviços.');
       }
     });
+  }
+
+  private servicoVazio(): Omit<Servico, 'id' | 'active'> {
+    return { nome: '', descricao: '', preco: 0 };
   }
 
   private validarFormulario(): string[] {

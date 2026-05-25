@@ -17,13 +17,10 @@ export class ClientesComponent implements OnInit {
   clientes: Cliente[] = [];
   errosFormulario: string[] = [];
   formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novoCliente: Omit<Cliente, 'id' | 'active'> = {
-    nome: '',
-    cpf: '',
-    email: '',
-    telefone: ''
-  };
+  novoCliente: Omit<Cliente, 'id' | 'active'> = this.clienteVazio();
 
   constructor(
     private readonly clientesService: ClientesService,
@@ -39,7 +36,32 @@ export class ClientesComponent implements OnInit {
     this.formAberto = !this.formAberto;
     if (!this.formAberto) {
       this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novoCliente = this.clienteVazio();
     }
+  }
+
+  editarCliente(cliente: Cliente): void {
+    this.novoCliente = { nome: cliente.nome, cpf: cliente.cpf, email: cliente.email, telefone: cliente.telefone };
+    this.idEditando = cliente.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.errosFormulario = [];
+  }
+
+  excluirCliente(id: string): void {
+    if (!window.confirm('Deseja realmente excluir este cliente?')) return;
+    this.clientesService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Cliente excluído com sucesso.');
+        this.carregarClientes();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir o cliente.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   salvarCliente(form: NgForm): void {
@@ -50,11 +72,18 @@ export class ClientesComponent implements OnInit {
       return;
     }
 
-    this.clientesService.adicionar(this.novoCliente).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.clientesService.atualizar(this.idEditando, { ...this.novoCliente })
+      : this.clientesService.adicionar({ ...this.novoCliente });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Cliente salvo com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Cliente atualizado com sucesso.' : 'Cliente cadastrado com sucesso.');
         form.resetForm({ nome: '', cpf: '', email: '', telefone: '' });
         this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.novoCliente = this.clienteVazio();
         this.carregarClientes();
       },
       error: (err) => {
@@ -74,6 +103,10 @@ export class ClientesComponent implements OnInit {
         this.mensagemService.erro('Falha ao carregar clientes.');
       }
     });
+  }
+
+  private clienteVazio(): Omit<Cliente, 'id' | 'active'> {
+    return { nome: '', cpf: '', email: '', telefone: '' };
   }
 
   private validarFormulario(): string[] {

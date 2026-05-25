@@ -20,6 +20,8 @@ export class VeiculosComponent implements OnInit {
   veiculos: Veiculo[] = [];
   errosFormulario: string[] = [];
   formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
   novoVeiculo: Omit<Veiculo, 'id' | 'active'> = this.criarVeiculoVazio();
 
@@ -39,7 +41,40 @@ export class VeiculosComponent implements OnInit {
     this.formAberto = !this.formAberto;
     if (!this.formAberto) {
       this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novoVeiculo = this.criarVeiculoVazio();
     }
+  }
+
+  editarVeiculo(veiculo: Veiculo): void {
+    this.novoVeiculo = {
+      idCliente: veiculo.idCliente,
+      placa: veiculo.placa,
+      modelo: veiculo.modelo,
+      marca: veiculo.marca,
+      anoFabricacao: veiculo.anoFabricacao,
+      cor: veiculo.cor,
+      quilometragem: veiculo.quilometragem
+    };
+    this.idEditando = veiculo.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.errosFormulario = [];
+  }
+
+  excluirVeiculo(id: string): void {
+    if (!window.confirm('Deseja realmente excluir este veículo?')) return;
+    this.veiculosService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Veículo excluído com sucesso.');
+        this.carregarVeiculos();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir o veículo.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   salvarVeiculo(form: NgForm): void {
@@ -50,11 +85,18 @@ export class VeiculosComponent implements OnInit {
       return;
     }
 
-    this.veiculosService.adicionar(this.novoVeiculo).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.veiculosService.atualizar(this.idEditando, { ...this.novoVeiculo })
+      : this.veiculosService.adicionar({ ...this.novoVeiculo });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Veículo salvo com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Veículo atualizado com sucesso.' : 'Veículo salvo com sucesso.');
         form.resetForm(this.criarVeiculoVazio());
         this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.novoVeiculo = this.criarVeiculoVazio();
         this.carregarVeiculos();
       },
       error: (err) => {

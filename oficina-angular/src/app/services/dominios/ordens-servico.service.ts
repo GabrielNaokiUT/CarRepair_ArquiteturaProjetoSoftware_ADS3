@@ -28,14 +28,22 @@ export class OrdensServicoService extends ApiBaseService {
 
   adicionar(ordem: Omit<OrdemServico, 'id' | 'active'>): Observable<OrdemServico> {
     return this.post<OrdemServico, Omit<OrdemServico, 'id' | 'active'>>(this.endpoint, ordem).pipe(
-      tap((ordemCriada) => {
-        this.ordens = [...this.ordens, ordemCriada];
-        // this.proximoId = this.calcularProximoId(this.ordens);
-
-      }),
+      tap((ordemCriada) => { this.ordens = [...this.ordens, ordemCriada]; }),
       catchError((err) => throwError(() => err))
     );
   }
 
+  atualizar(id: string, ordem: Omit<OrdemServico, 'id' | 'active'>): Observable<OrdemServico> {
+    return this.put<OrdemServico, Omit<OrdemServico, 'id' | 'active'>>(this.endpoint, id, ordem).pipe(
+      tap((atualizado) => { this.ordens = this.ordens.map(o => o.id === id ? atualizado : o); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.ordens = this.ordens.filter(o => o.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

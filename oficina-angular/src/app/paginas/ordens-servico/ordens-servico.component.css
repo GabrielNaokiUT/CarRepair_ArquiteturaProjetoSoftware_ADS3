@@ -257,7 +257,7 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 0 2px 16px rgba(26,39,68,0.06);
 }
 
@@ -408,6 +408,7 @@
 }
 
 .b-cancel { background: rgba(74,26,46,0.08); color: #6b2040; border: 1px solid rgba(74,26,46,0.14); }
+.b-exec   { background: rgba(26,39,68,0.08); color: var(--p1); border: 1px solid rgba(26,39,68,0.18); }
 
 .btn-cancel-form {
   background: transparent; border: 1px solid var(--border);
@@ -416,14 +417,14 @@
 }
 .btn-cancel-form:hover { border-color: rgba(26,39,68,0.25); color: var(--text); }
 
-.table-card table { width: 100%; border-collapse: collapse; }
+.table-card table { width: 100%; min-width: 880px; border-collapse: collapse; }
 .table-card thead tr { border-bottom: 1px solid var(--border); background: rgba(26,39,68,0.02); }
 .table-card thead th {
-  padding: 0.85rem 1.5rem; text-align: left;
+  padding: 0.75rem 1rem; text-align: left;
   font-size: 0.66rem; font-weight: 700; color: var(--muted);
   text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap;
 }
 .table-card tbody tr { border-bottom: 1px solid rgba(26,39,68,0.05); transition: background 0.15s; }
 .table-card tbody tr:last-child { border-bottom: none; }
 .table-card tbody tr:hover { background: rgba(201,168,108,0.03); }
-.table-card tbody td { padding: 1rem 1.5rem; font-size: 0.845rem; color: var(--muted); }
+.table-card tbody td { padding: 0.85rem 1rem; font-size: 0.835rem; color: var(--muted); }

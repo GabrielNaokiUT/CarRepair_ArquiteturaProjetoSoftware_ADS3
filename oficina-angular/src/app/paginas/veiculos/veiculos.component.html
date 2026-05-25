@@ -14,7 +14,7 @@
   <div class="inner-content">
     <div class="form-wrapper" [class.open]="formAberto">
       <div class="form-card">
-        <div class="form-title">Cadastrar veículo</div>
+        <div class="form-title">{{ editando ? 'Editar veículo' : 'Cadastrar veículo' }}</div>
         <form #formVeiculo="ngForm" (ngSubmit)="salvarVeiculo(formVeiculo)">
           <div class="form-grid cols3">
             <div class="form-group">
@@ -69,6 +69,7 @@
             <th>Cor</th>
             <th>Cliente</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -82,6 +83,12 @@
               <span class="badge" [class.b-ativo]="veiculo.active" [class.b-inativo]="!veiculo.active">
                 {{ veiculo.active ? 'Ativo' : 'Inativo' }}
               </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarVeiculo(veiculo)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirVeiculo(veiculo.id)">✕ Excluir</button>
+              </div>
             </td>
           </tr>
         </tbody>

@@ -14,7 +14,7 @@
   <div class="inner-content">
     <div class="form-wrapper" [class.open]="formAberto">
       <div class="form-card">
-        <div class="form-title">Cadastrar cliente</div>
+        <div class="form-title">{{ editando ? 'Editar cliente' : 'Cadastrar cliente' }}</div>
         <form #formCliente="ngForm" (ngSubmit)="salvarCliente(formCliente)">
           <div class="form-grid">
             <div class="form-group">
@@ -57,6 +57,7 @@
             <th>E-mail</th>
             <th>Telefone</th>
             <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -69,6 +70,12 @@
               <span class="badge" [class.b-ativo]="cliente.active" [class.b-inativo]="!cliente.active">
                 {{ cliente.active ? 'Ativo' : 'Inativo' }}
               </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarCliente(cliente)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirCliente(cliente.id)">✕ Excluir</button>
+              </div>
             </td>
           </tr>
         </tbody>
