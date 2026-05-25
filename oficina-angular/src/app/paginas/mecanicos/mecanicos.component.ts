@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
-import { validarTelefoneBasico } from '../../core/validacoes/campos.util';
+import { validarCpfBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';
 import { Mecanico } from '../../modelos/mecanico';
 import { MecanicosService } from '../../services/dominios/mecanicos.service';
 import { MensagemService } from '../../shared/mensagens/mensagem.service';
@@ -16,11 +16,15 @@ import { MensagemService } from '../../shared/mensagens/mensagem.service';
 export class MecanicosComponent implements OnInit {
   mecanicos: Mecanico[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
 
-  novoMecanico: Omit<Mecanico, 'id'> = {
+  novoMecanico: Omit<Mecanico, 'id' | 'active'> = {
     nome: '',
+    cpf: '',
+    email: '',
     especialidade: '',
-    telefone: ''
+    telefone: '',
+    crea: ''
   };
 
   constructor(
@@ -31,6 +35,13 @@ export class MecanicosComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarMecanicos();
+  }
+
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+    }
   }
 
   salvarMecanico(form: NgForm): void {
@@ -44,11 +55,13 @@ export class MecanicosComponent implements OnInit {
     this.mecanicosService.adicionar(this.novoMecanico).subscribe({
       next: () => {
         this.mensagemService.sucesso('Mecânico salvo com sucesso.');
-        form.resetForm({ nome: '', especialidade: '', telefone: '' });
+        form.resetForm({ nome: '', cpf: '', email: '', especialidade: '', telefone: '', crea: '' });
+        this.formAberto = false;
         this.carregarMecanicos();
       },
-      error: () => {
-        this.mensagemService.erro('Não foi possível salvar o mecânico no momento.');
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar o mecânico no momento.';
+        this.mensagemService.erro(msg);
       }
     });
   }
@@ -70,6 +83,10 @@ export class MecanicosComponent implements OnInit {
 
     if (!this.novoMecanico.nome.trim()) {
       erros.push('Informe o nome do mecânico.');
+    }
+
+    if (!validarCpfBasico(this.novoMecanico.cpf)) {
+      erros.push('CPF inválido. Verifique os 11 dígitos e os dígitos verificadores.');
     }
 
     if (!this.novoMecanico.especialidade.trim()) {

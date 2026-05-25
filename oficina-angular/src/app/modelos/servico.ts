@@ -3,4 +3,5 @@ export interface Servico {
   nome: string;
   descricao: string;
   preco: number;
+  active: boolean;
 }

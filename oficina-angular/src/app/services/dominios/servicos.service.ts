@@ -27,8 +27,8 @@ export class ServicosService extends ApiBaseService {
     );
   }
 
-  adicionar(servico: Omit<Servico, 'id'>): Observable<Servico> {
-    return this.post<Servico, Omit<Servico, 'id'>>(this.endpoint, servico).pipe(
+  adicionar(servico: Omit<Servico, 'id' | 'active'>): Observable<Servico> {
+    return this.post<Servico, Omit<Servico, 'id' | 'active'>>(this.endpoint, servico).pipe(
       tap((servicoCriado) => { this.servicos = [...this.servicos, servicoCriado]; }),
       catchError((err) => throwError(() => err))
     );

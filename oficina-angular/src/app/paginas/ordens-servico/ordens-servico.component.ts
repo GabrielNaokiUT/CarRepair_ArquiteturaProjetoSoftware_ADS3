@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 
 import { Cliente } from '../../modelos/cliente';
 import { Mecanico } from '../../modelos/mecanico';
-import { OrdemServico, PecaAplicada } from '../../modelos/ordem-servico';
+import { OrdemServico } from '../../modelos/ordem-servico';
 import { Servico } from '../../modelos/servico';
 import { Usuario } from '../../modelos/usuario';
 import { Veiculo } from '../../modelos/veiculo';
@@ -31,8 +31,9 @@ export class OrdensServicoComponent implements OnInit {
   servicos: Servico[] = [];
   ordensServico: OrdemServico[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
 
-  novaOrdem: Omit<OrdemServico, 'id'> = {
+  novaOrdem: Omit<OrdemServico, 'id' | 'active'> = {
     idCliente: '',
     idVeiculo: '',
     idUsuarioResponsavel: '',
@@ -44,15 +45,7 @@ export class OrdensServicoComponent implements OnInit {
     idPecasAplicadas: []
   };
 
-  servicoSelecionadoId: string = '';
-
-  novaPeca: PecaAplicada = {
-    descricao: '',
-    quantidade: 1,
-    valorUnitario: 0
-  };
-
-  pecasTemp: PecaAplicada[] = [];
+  servicoSelecionadoId = '';
 
   constructor(
     private readonly clientesService: ClientesService,
@@ -89,6 +82,13 @@ export class OrdensServicoComponent implements OnInit {
     this.carregarOrdens();
   }
 
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+    }
+  }
+
   adicionarServico(): void {
     if (!this.servicoSelecionadoId) {
       this.mensagemService.aviso('Selecione um serviço antes de adicionar.');
@@ -110,20 +110,6 @@ export class OrdensServicoComponent implements OnInit {
     this.novaOrdem.idServicosExecutados = this.novaOrdem.idServicosExecutados.filter((s) => s !== id);
   }
 
-  adicionarPeca(): void {
-    if (!this.novaPeca.descricao.trim() || this.novaPeca.quantidade <= 0 || this.novaPeca.valorUnitario <= 0) {
-      this.mensagemService.aviso('Preencha descrição, quantidade e valor unitário da peça antes de adicionar.');
-      return;
-    }
-
-    this.pecasTemp = [...this.pecasTemp, { ...this.novaPeca }];
-    this.novaPeca = {
-      descricao: '',
-      quantidade: 1,
-      valorUnitario: 0
-    };
-  }
-
   salvarOrdemServico(form: NgForm): void {
     this.errosFormulario = this.validarFormulario();
 
@@ -132,41 +118,60 @@ export class OrdensServicoComponent implements OnInit {
       return;
     }
 
-    this.ordensServicoService
-      .adicionar({ ...this.novaOrdem })
-      .subscribe({
-        next: () => {
-          this.mensagemService.sucesso('Ordem de serviço cadastrada com sucesso.');
-          form.resetForm({
-            idCliente: '',
-            idVeiculo: '',
-            idUsuarioResponsavel: '',
-            idMecanicoResponsavel: '',
-            dataAbertura: new Date().toISOString().slice(0, 10),
-            descricaoProblema: ''
-          });
-          this.novaOrdem.idServicosExecutados = [];
-          this.novaOrdem.idPecasAplicadas = [];
-          this.pecasTemp = [];
-          this.carregarOrdens();
-        },
-        error: () => {
-          this.mensagemService.erro('Não foi possível cadastrar a ordem de serviço no momento.');
-        }
-      });
+    this.ordensServicoService.adicionar({ ...this.novaOrdem }).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Ordem de serviço cadastrada com sucesso.');
+        form.resetForm({
+          idCliente: '',
+          idVeiculo: '',
+          idUsuarioResponsavel: '',
+          idMecanicoResponsavel: '',
+          dataAbertura: new Date().toISOString().slice(0, 10),
+          descricaoProblema: ''
+        });
+        this.novaOrdem.idServicosExecutados = [];
+        this.novaOrdem.idPecasAplicadas = [];
+        this.formAberto = false;
+        this.carregarOrdens();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível cadastrar a ordem de serviço no momento.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   nomeCliente(clienteId: string): string {
-    return this.clientesService.todos.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
+    return this.clientesService.todos.find((c) => c.id === clienteId)?.nome ?? clienteId;
   }
 
   nomeMecanico(mecanicoId: string): string {
-    return this.mecanicosService.todos.find((mecanico) => mecanico.id === mecanicoId)?.nome ?? 'Não informado';
+    return this.mecanicosService.todos.find((m) => m.id === mecanicoId)?.nome ?? mecanicoId;
   }
 
   dadosVeiculo(veiculoId: string): string {
-    const veiculo = this.veiculosService.todos.find((item) => item.id === veiculoId);
-    return veiculo ? `${veiculo.placa} - ${veiculo.modelo}` : 'Não informado';
+    const veiculo = this.veiculosService.todos.find((v) => v.id === veiculoId);
+    return veiculo ? `${veiculo.placa}` : veiculoId;
+  }
+
+  badgeClassStatus(status: string): Record<string, boolean> {
+    return {
+      'badge': true,
+      'b-aberta':  status === 'aberta',
+      'b-exec':    status === 'em_execucao',
+      'b-fin':     status === 'finalizada',
+      'b-cancel':  status === 'cancelada'
+    };
+  }
+
+  labelStatus(status: string): string {
+    const map: Record<string, string> = {
+      aberta: 'Aberta',
+      em_execucao: 'Em execução',
+      finalizada: 'Finalizada',
+      cancelada: 'Cancelada'
+    };
+    return map[status] ?? status;
   }
 
   private carregarOrdens(): void {
@@ -184,33 +189,12 @@ export class OrdensServicoComponent implements OnInit {
   private validarFormulario(): string[] {
     const erros: string[] = [];
 
-    if (!this.novaOrdem.idCliente) {
-      erros.push('Selecione um cliente.');
-    }
-
-    if (!this.novaOrdem.idVeiculo) {
-      erros.push('Selecione um veículo.');
-    }
-
-    if (!this.novaOrdem.idUsuarioResponsavel) {
-      erros.push('Selecione um usuário responsável.');
-    }
-
-    if (!this.novaOrdem.idMecanicoResponsavel) {
-      erros.push('Selecione um mecânico responsável.');
-    }
-
-    if (!this.novaOrdem.dataAbertura) {
-      erros.push('Informe a data de abertura.');
-    }
-
-    if (this.novaOrdem.descricaoProblema.trim().length < 10) {
-      erros.push('Descreva o problema com ao menos 10 caracteres.');
-    }
-
-    if (!this.novaOrdem.idServicosExecutados.length) {
-      erros.push('Adicione ao menos um serviço executado.');
-    }
+    if (!this.novaOrdem.idCliente) erros.push('Selecione um cliente.');
+    if (!this.novaOrdem.idVeiculo) erros.push('Selecione um veículo.');
+    if (!this.novaOrdem.idUsuarioResponsavel) erros.push('Selecione um usuário responsável.');
+    if (!this.novaOrdem.idMecanicoResponsavel) erros.push('Selecione um mecânico responsável.');
+    if (!this.novaOrdem.dataAbertura) erros.push('Informe a data de abertura.');
+    if (this.novaOrdem.descricaoProblema.trim().length < 5) erros.push('Descreva o problema com ao menos 5 caracteres.');
 
     return erros;
   }

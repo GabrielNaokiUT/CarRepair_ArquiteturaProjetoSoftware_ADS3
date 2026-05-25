@@ -19,8 +19,9 @@ export class VeiculosComponent implements OnInit {
   clientes: Cliente[] = [];
   veiculos: Veiculo[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
 
-  novoVeiculo: Omit<Veiculo, 'id'> = this.criarVeiculoVazio();
+  novoVeiculo: Omit<Veiculo, 'id' | 'active'> = this.criarVeiculoVazio();
 
   constructor(
     private readonly clientesService: ClientesService,
@@ -32,6 +33,13 @@ export class VeiculosComponent implements OnInit {
   ngOnInit(): void {
     this.carregarClientes();
     this.carregarVeiculos();
+  }
+
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+    }
   }
 
   salvarVeiculo(form: NgForm): void {
@@ -46,10 +54,12 @@ export class VeiculosComponent implements OnInit {
       next: () => {
         this.mensagemService.sucesso('Veículo salvo com sucesso.');
         form.resetForm(this.criarVeiculoVazio());
+        this.formAberto = false;
         this.carregarVeiculos();
       },
-      error: () => {
-        this.mensagemService.erro('Não foi possível salvar o veículo no momento.');
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar o veículo no momento.';
+        this.mensagemService.erro(msg);
       }
     });
   }
@@ -109,7 +119,7 @@ export class VeiculosComponent implements OnInit {
     return erros;
   }
 
-  private criarVeiculoVazio(): Omit<Veiculo, 'id'> {
+  private criarVeiculoVazio(): Omit<Veiculo, 'id' | 'active'> {
     return {
       idCliente: '',
       placa: '',

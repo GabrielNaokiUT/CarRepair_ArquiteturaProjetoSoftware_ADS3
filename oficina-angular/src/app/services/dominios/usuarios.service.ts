@@ -26,8 +26,8 @@ export class UsuariosService extends ApiBaseService {
 
   get todos(): Usuario[] { return this.usuarios; }
 
-  adicionar(usuario: Omit<Usuario, 'id'>): Observable<Usuario> {
-    return this.post<Usuario, Omit<Usuario, 'id'>>(this.endpoint, usuario).pipe(
+  adicionar(usuario: Omit<Usuario, 'id' | 'active'>): Observable<Usuario> {
+    return this.post<Usuario, Omit<Usuario, 'id' | 'active'>>(this.endpoint, usuario).pipe(
       tap((usuarioCriado) => {
         this.usuarios = [...this.usuarios, usuarioCriado];
       }),

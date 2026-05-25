@@ -1,31 +1,203 @@
 <div class="dash-page">
-  <div class="dash-hero">
-    <div class="dash-hero-inner">
-      <span class="dash-eyebrow">SENAI FATESG &nbsp;·&nbsp; Análise e Desenvolvimento de Sistemas &nbsp;·&nbsp; 3º Semestre</span>
-      <h1 class="dash-title">Gestão de Oficina<br><em>Mecânica</em></h1>
-      <p class="dash-sub">Sistema acadêmico com arquitetura em camadas, domínios isolados e API REST.</p>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <span class="hero-eyebrow">SENAI FATESG &nbsp;·&nbsp; Análise e Desenvolvimento de Sistemas &nbsp;·&nbsp; 3º Semestre</span>
+      <h1>Gestão de oficina<br><em>mecânica</em></h1>
+      <p>Sistema acadêmico com arquitetura em camadas, domínios isolados e API REST. Backend em <strong>Java 21 + Spring Boot</strong>. Frontend em <strong>Angular 21 + TypeScript</strong>.</p>
+      <a class="btn-hero" routerLink="/ordens-servico">Explorar ordens de serviço</a>
     </div>
   </div>
 
-  <div class="dash-content">
-    <div class="dash-section-label">Resumo geral</div>
-    <div class="dash-grid">
-      <div class="dash-card">
-        <div class="dash-card-lbl">Clientes</div>
-        <div class="dash-card-val">{{ totalClientes }}</div>
+  <!-- MOCK WIDGET -->
+  <div class="hero-mock-wrap">
+    <div class="hero-mock">
+      <div class="mock-bar">
+        <div class="mock-dot r"></div>
+        <div class="mock-dot y"></div>
+        <div class="mock-dot g"></div>
+        <span class="mock-title">CarRepair — Ordens de Serviço</span>
       </div>
-      <div class="dash-card">
-        <div class="dash-card-lbl">Veículos</div>
-        <div class="dash-card-val">{{ totalVeiculos }}</div>
-      </div>
-      <div class="dash-card">
-        <div class="dash-card-lbl">Mecânicos</div>
-        <div class="dash-card-val">{{ totalMecanicos }}</div>
-      </div>
-      <div class="dash-card">
-        <div class="dash-card-lbl">Ordens de Serviço</div>
-        <div class="dash-card-val">{{ totalOrdensServico }}</div>
+      <div class="mock-body">
+        <div class="mock-sidebar">
+          <div class="mock-sidebar-logo">Car<span>Repair</span></div>
+          <div class="mock-sidebar-label">Menu</div>
+          <div class="mock-nav-item active">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Ordens de Serviço
+          </div>
+          <div class="mock-nav-item">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Clientes
+          </div>
+          <div class="mock-nav-item">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h5l2 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Veículos
+          </div>
+          <div class="mock-nav-item">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Mecânicos
+          </div>
+          <div class="mock-nav-item">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 1 21 12a10 10 0 0 1-1.93 7.07M4.93 4.93A10 10 0 0 0 3 12a10 10 0 0 0 1.93 7.07"/></svg>
+            Serviços
+          </div>
+          <div class="mock-nav-item">
+            <svg class="mock-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Usuários
+          </div>
+        </div>
+        <div class="mock-content">
+          <div class="mock-section-title">Resumo</div>
+          <div class="mock-stats">
+            <div class="mock-stat"><span class="mock-stat-val">{{ totalClientes }}</span><span class="mock-stat-lbl">Clientes</span></div>
+            <div class="mock-stat"><span class="mock-stat-val">{{ totalVeiculos }}</span><span class="mock-stat-lbl">Veículos</span></div>
+            <div class="mock-stat"><span class="mock-stat-val">{{ totalOrdensServico }}</span><span class="mock-stat-lbl">Ordens de Serviço</span></div>
+          </div>
+          <div class="mock-row">
+            <div><div class="mock-row-label">Mecânicos cadastrados</div><div class="mock-row-sub">Total ativo no sistema</div></div>
+            <span class="mock-badge mb-exec">{{ totalMecanicos }} mecânicos</span>
+          </div>
+          <div class="mock-row">
+            <div><div class="mock-row-label">Usuários do sistema</div><div class="mock-row-sub">Administrativos, atendentes, gestores</div></div>
+            <span class="mock-badge mb-open">{{ totalUsuarios }} usuários</span>
+          </div>
+          <div class="mock-row">
+            <div><div class="mock-row-label">Serviços cadastrados</div><div class="mock-row-sub">Catálogo de serviços disponíveis</div></div>
+            <span class="mock-badge mb-done">{{ totalServicos }} serviços</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- DOMÍNIOS -->
+  <div class="home-domains">
+    <div class="home-domains-inner">
+      <div class="home-section-label">Domínios do sistema</div>
+      <h2 class="home-section-title">Cobertura completa do ciclo de atendimento</h2>
+      <div class="domains-grid">
+        <div class="domain-card" routerLink="/clientes">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="domain-name">Clientes</div>
+          <div class="domain-desc">Cadastro com UUID, soft delete e auditoria automática via dataHoraCriacao.</div>
+          <div class="domain-endpoint">/clientes</div>
+        </div>
+        <div class="domain-card" routerLink="/veiculos">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h5l2 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="domain-name">Veículos</div>
+          <div class="domain-desc">Vinculados a clientes com relacionamento 1:N modelado no PostgreSQL.</div>
+          <div class="domain-endpoint">/veiculos</div>
+        </div>
+        <div class="domain-card" routerLink="/mecanicos">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="domain-name">Mecânicos</div>
+          <div class="domain-desc">Nome, CPF, e-mail, especialidade e CREA. 11 arquivos Java criados na v4.0.</div>
+          <div class="domain-endpoint">/mecanicos</div>
+        </div>
+        <div class="domain-card" routerLink="/servicos">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 1 21 12a10 10 0 0 1-1.93 7.07M4.93 4.93A10 10 0 0 0 3 12a10 10 0 0 0 1.93 7.07"/></svg>
+          </div>
+          <div class="domain-name">Serviços</div>
+          <div class="domain-desc">Catálogo de serviços e peças vinculados às Ordens de Serviço via tabelas associativas.</div>
+          <div class="domain-endpoint">/servicos</div>
+        </div>
+        <div class="domain-card" routerLink="/ordens-servico">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="domain-name">Ordens de Serviço</div>
+          <div class="domain-desc">Tabela central. Vincula cliente, veículo, mecânico e usuário. Status via ENUM no banco.</div>
+          <div class="domain-endpoint">/ordens-servico</div>
+        </div>
+        <div class="domain-card" routerLink="/usuarios">
+          <div class="domain-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="domain-name">Usuários</div>
+          <div class="domain-desc">Perfis: administrativo, atendente e gestor. senha_hash protegida e nunca exposta no DTO.</div>
+          <div class="domain-endpoint">/usuarios</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="home-stack-strip">
+    <div class="home-stack-inner">
+      <div>
+        <div class="home-section-label">Stack</div>
+        <h2 class="home-section-title">Tecnologias utilizadas</h2>
+        <p class="stack-strip-desc">Arquitetura monolítica modular com separação obrigatória em camadas. Classes genéricas no pacote <code>core</code> eliminam duplicação de CRUD entre os domínios.</p>
+      </div>
+      <div class="stack-strip-tags">
+        <span class="stag"><span class="stag-dot" style="background:#f89820"></span>Java 21 LTS</span>
+        <span class="stag"><span class="stag-dot" style="background:#6aad3d"></span>Spring Boot</span>
+        <span class="stag"><span class="stag-dot" style="background:#336791"></span>PostgreSQL</span>
+        <span class="stag"><span class="stag-dot" style="background:#dd0031"></span>Angular 21</span>
+        <span class="stag"><span class="stag-dot" style="background:#3178c6"></span>TypeScript</span>
+        <span class="stag"><span class="stag-dot" style="background:#c71a36"></span>Maven</span>
+        <span class="stag"><span class="stag-dot" style="background:#bc4f25"></span>Lombok</span>
+        <span class="stag"><span class="stag-dot" style="background:#59666c"></span>Hibernate JPA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="home-cta">
+    <h2 class="home-cta-title">Explore o sistema</h2>
+    <p class="home-cta-sub">Navegue pelos módulos e conheça a arquitetura do projeto.</p>
+    <div class="home-cta-btns">
+      <a class="btn-hero" routerLink="/ordens-servico">Ver ordens de serviço</a>
+      <a class="btn-hero-outline" routerLink="/clientes">Ver clientes</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="home-footer-wrap">
+    <div class="footer-top">
+      <div>
+        <span class="footer-brand-logo">Car<span>Repair</span></span>
+        <p class="footer-brand-desc">Sistema acadêmico de gestão de oficina mecânica. Desenvolvido na disciplina de Arquitetura e Projeto de Software.</p>
+        <div class="footer-col-item">SENAI FATESG &mdash; Goiânia, GO</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Equipe</div>
+        <div class="footer-col-item">Caio Abreu</div>
+        <div class="footer-col-item">Cassiano Abreu</div>
+        <div class="footer-col-item">Gabriel Naoki</div>
+        <div class="footer-col-item">Wyllian Mariano</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navegação</div>
+        <div class="footer-col-item"><a routerLink="/dashboard">Home</a></div>
+        <div class="footer-col-item"><a routerLink="/clientes">Clientes</a></div>
+        <div class="footer-col-item"><a routerLink="/veiculos">Veículos</a></div>
+        <div class="footer-col-item"><a routerLink="/mecanicos">Mecânicos</a></div>
+        <div class="footer-col-item"><a routerLink="/ordens-servico">Ordens de Serviço</a></div>
+        <div class="footer-col-item"><a routerLink="/usuarios">Usuários</a></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Projeto</div>
+        <div class="footer-col-item">ADS &mdash; 3º Semestre</div>
+        <div class="footer-col-item">Arquitetura e Projeto de Software</div>
+        <div class="footer-col-item">Java 21 + Spring Boot</div>
+        <div class="footer-col-item">Angular 21 + TypeScript</div>
+        <div class="footer-col-item"><a href="https://github.com/Caio4breu/projetoArquitetura" target="_blank">github.com/Caio4breu ↗</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2025 CarRepair &middot; SENAI FATESG. Todos os direitos reservados.</span>
+      <span class="footer-inst">Disciplina: Arquitetura e Projeto de Software &middot; Análise e Desenvolvimento de Sistemas</span>
+    </div>
+  </div>
+
 </div>

@@ -14,8 +14,16 @@
 
 .inner-hero {
   background: var(--p1);
-  padding: 2.5rem 4rem;
+  padding: 3rem 4rem 2.75rem;
   border-bottom: 2px solid var(--accent);
+}
+
+.form-wrapper { display: none; }
+.form-wrapper.open { display: block; animation: fadeDown 0.25s ease both; }
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .inner-hero-top {
@@ -398,3 +406,24 @@
   color: #6b2040;
   border: 1px solid rgba(74,26,46,0.14);
 }
+
+.b-cancel { background: rgba(74,26,46,0.08); color: #6b2040; border: 1px solid rgba(74,26,46,0.14); }
+
+.btn-cancel-form {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--muted); padding: 0.65rem 1.1rem; border-radius: 7px;
+  font-size: 0.82rem; cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.btn-cancel-form:hover { border-color: rgba(26,39,68,0.25); color: var(--text); }
+
+.table-card table { width: 100%; border-collapse: collapse; }
+.table-card thead tr { border-bottom: 1px solid var(--border); background: rgba(26,39,68,0.02); }
+.table-card thead th {
+  padding: 0.85rem 1.5rem; text-align: left;
+  font-size: 0.66rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap;
+}
+.table-card tbody tr { border-bottom: 1px solid rgba(26,39,68,0.05); transition: background 0.15s; }
+.table-card tbody tr:last-child { border-bottom: none; }
+.table-card tbody tr:hover { background: rgba(201,168,108,0.03); }
+.table-card tbody td { padding: 1rem 1.5rem; font-size: 0.845rem; color: var(--muted); }

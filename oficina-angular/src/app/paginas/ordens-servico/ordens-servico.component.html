@@ -1,190 +1,130 @@
 <div class="inner-page">
-
   <div class="inner-hero">
     <div class="inner-hero-top">
       <div>
         <div class="inner-label">Gestão</div>
         <div class="inner-title">Ordens de Serviço</div>
       </div>
+      <button class="btn-add" (click)="toggleForm()">
+        {{ formAberto ? '✕ Cancelar' : '+ Nova OS' }}
+      </button>
     </div>
   </div>
 
   <div class="inner-content">
-
-    <div class="form-card">
-      <div class="form-title">Nova Ordem de Serviço</div>
-
-      <form #formOs="ngForm" (ngSubmit)="salvarOrdemServico(formOs)">
-
-        <div class="form-grid form-grid-2">
-          <div class="form-group">
-            <label>Cliente</label>
-            <select name="idCliente" [(ngModel)]="novaOrdem.idCliente" required>
-              <option [ngValue]="0">Selecione</option>
-              <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">{{ cliente.nome }}</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Veículo</label>
-            <select name="idVeiculo" [(ngModel)]="novaOrdem.idVeiculo" required>
-              <option [ngValue]="0">Selecione</option>
-              <option *ngFor="let veiculo of veiculos" [ngValue]="veiculo.id">
-                {{ veiculo.placa }} - {{ veiculo.modelo }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Usuário Responsável</label>
-            <select name="idUsuarioResponsavel" [(ngModel)]="novaOrdem.idUsuarioResponsavel" required>
-              <option [ngValue]="0">Selecione</option>
-              <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">{{ usuario.nome }}</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Mecânico Responsável</label>
-            <select name="idMecanicoResponsavel" [(ngModel)]="novaOrdem.idMecanicoResponsavel" required>
-              <option [ngValue]="0">Selecione</option>
-              <option *ngFor="let mecanico of mecanicos" [ngValue]="mecanico.id">{{ mecanico.nome }}</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Data de Abertura</label>
-            <input name="dataAbertura" type="date" [(ngModel)]="novaOrdem.dataAbertura" required />
-          </div>
-
-          <div class="form-group form-full">
-            <label>Descrição do Problema</label>
-            <textarea name="descricaoProblema" [(ngModel)]="novaOrdem.descricaoProblema" required minlength="10" rows="3"></textarea>
-          </div>
-        </div>
-
-        <div class="fieldset-card">
-          <div class="fieldset-title">Serviços Executados</div>
-          <div class="inline-row">
+    <div class="form-wrapper" [class.open]="formAberto">
+      <div class="form-card">
+        <div class="form-title">Abrir ordem de serviço</div>
+        <form #formOs="ngForm" (ngSubmit)="salvarOrdemServico(formOs)">
+          <div class="form-grid form-grid-2">
             <div class="form-group">
-              <label>Serviço</label>
-              <select name="servicoSelecionadoId" [(ngModel)]="servicoSelecionadoId">
-                <option value="">Selecione um serviço</option>
-                <option *ngFor="let servico of servicos" [ngValue]="servico.id">
-                  {{ servico.nome }} — R$ {{ servico.preco | number: '1.2-2' }}
-                </option>
+              <label>Cliente</label>
+              <select name="idCliente" [(ngModel)]="novaOrdem.idCliente" required>
+                <option value="">Selecione</option>
+                <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
               </select>
             </div>
-            <div class="form-group form-group-action">
-              <label>&nbsp;</label>
-              <button type="button" class="btn-add" (click)="adicionarServico()">+ Adicionar</button>
-            </div>
-          </div>
-          <ul class="temp-list" *ngIf="novaOrdem.idServicosExecutados.length">
-            <li *ngFor="let id of novaOrdem.idServicosExecutados">
-              <span class="temp-nome">{{ nomeServico(id) }}</span>
-              <button type="button" class="btn-remover" (click)="removerServico(id)">×</button>
-            </li>
-          </ul>
-          <div class="temp-empty" *ngIf="!novaOrdem.idServicosExecutados.length">Nenhum serviço adicionado ainda.</div>
-        </div>
-
-        <div class="fieldset-card">
-          <div class="fieldset-title">Peças Aplicadas</div>
-          <div class="inline-row">
             <div class="form-group">
-              <label>Descrição</label>
-              <input name="pecaDescricao" [(ngModel)]="novaPeca.descricao" placeholder="Ex: Filtro de ar" />
+              <label>Veículo</label>
+              <select name="idVeiculo" [(ngModel)]="novaOrdem.idVeiculo" required>
+                <option value="">Selecione</option>
+                <option *ngFor="let veiculo of veiculos" [value]="veiculo.id">{{ veiculo.placa }} — {{ veiculo.modelo }}</option>
+              </select>
             </div>
-            <div class="form-group form-group-sm">
-              <label>Quantidade</label>
-              <input name="pecaQuantidade" type="number" [(ngModel)]="novaPeca.quantidade" placeholder="1" />
+            <div class="form-group">
+              <label>Mecânico responsável</label>
+              <select name="idMecanicoResponsavel" [(ngModel)]="novaOrdem.idMecanicoResponsavel" required>
+                <option value="">Selecione</option>
+                <option *ngFor="let mecanico of mecanicos" [value]="mecanico.id">{{ mecanico.nome }}</option>
+              </select>
             </div>
-            <div class="form-group form-group-sm">
-              <label>Valor Unit. (R$)</label>
-              <input name="pecaValorUnitario" type="number" [(ngModel)]="novaPeca.valorUnitario" placeholder="0,00" />
+            <div class="form-group">
+              <label>Usuário responsável</label>
+              <select name="idUsuarioResponsavel" [(ngModel)]="novaOrdem.idUsuarioResponsavel" required>
+                <option value="">Selecione</option>
+                <option *ngFor="let usuario of usuarios" [value]="usuario.id">{{ usuario.nome }}</option>
+              </select>
             </div>
-            <div class="form-group form-group-action">
-              <label>&nbsp;</label>
-              <button type="button" class="btn-add" (click)="adicionarPeca()">+ Adicionar</button>
+            <div class="form-group">
+              <label>Descrição do problema</label>
+              <input name="descricaoProblema" [(ngModel)]="novaOrdem.descricaoProblema" required placeholder="Problema relatado pelo cliente" />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select name="statusOrdemServico" [(ngModel)]="novaOrdem.statusOrdemServico">
+                <option value="aberta">Aberta</option>
+                <option value="em_execucao">Em execução</option>
+                <option value="finalizada">Finalizada</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
             </div>
           </div>
-          <ul class="temp-list" *ngIf="pecasTemp.length">
-            <li *ngFor="let peca of pecasTemp">
-              <span class="temp-nome">{{ peca.descricao }}</span>
-              <span class="temp-meta">{{ peca.quantidade }}x &bull; R$ {{ peca.valorUnitario | number: '1.2-2' }}</span>
-            </li>
+
+          <div class="fieldset-card">
+            <div class="fieldset-title">Serviços executados</div>
+            <div class="inline-row">
+              <div class="form-group">
+                <label>Serviço</label>
+                <select name="servicoSelecionadoId" [(ngModel)]="servicoSelecionadoId">
+                  <option value="">Selecione um serviço</option>
+                  <option *ngFor="let servico of servicos" [value]="servico.id">
+                    {{ servico.nome }} — R$ {{ servico.preco | number:'1.2-2' }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group form-group-action">
+                <label>&nbsp;</label>
+                <button type="button" class="btn-add" (click)="adicionarServico()">+ Adicionar</button>
+              </div>
+            </div>
+            <ul class="temp-list" *ngIf="novaOrdem.idServicosExecutados.length">
+              <li *ngFor="let id of novaOrdem.idServicosExecutados">
+                <span class="temp-nome">{{ nomeServico(id) }}</span>
+                <button type="button" class="btn-remover" (click)="removerServico(id)">×</button>
+              </li>
+            </ul>
+            <div class="temp-empty" *ngIf="!novaOrdem.idServicosExecutados.length">Nenhum serviço adicionado ainda.</div>
+          </div>
+
+          <ul class="erros" *ngIf="errosFormulario.length">
+            <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
           </ul>
-          <div class="temp-empty" *ngIf="!pecasTemp.length">Nenhuma peça adicionada ainda.</div>
-        </div>
-
-        <ul class="erros" *ngIf="errosFormulario.length">
-          <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
-        </ul>
-
-        <div class="form-actions">
-          <button type="submit" class="btn-save">Cadastrar Ordem de Serviço</button>
-        </div>
-
-      </form>
+          <div class="form-actions">
+            <button type="submit" class="btn-save">Abrir OS</button>
+            <button type="button" class="btn-cancel-form" (click)="toggleForm()">Cancelar</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <div class="table-card">
       <div class="table-top">
-        <span class="table-count">{{ ordensServico.length }} ordem(ns) cadastrada(s)</span>
+        <span class="table-count">{{ ordensServico.length }} registro(s)</span>
       </div>
-
-      <div class="os-list">
-        <div class="os-item" *ngFor="let ordem of ordensServico">
-          <div class="os-header">
-            <div class="os-id">OS #{{ ordem.id }}</div>
-            <span class="badge" [ngClass]="{
-              'b-aberta':    ordem.statusOrdemServico === 'aberta',
-              'b-execucao':  ordem.statusOrdemServico === 'em_execucao',
-              'b-fin':       ordem.statusOrdemServico === 'finalizada',
-              'b-cancelada': ordem.statusOrdemServico === 'cancelada'
-            }">{{ ordem.statusOrdemServico }}</span>
-          </div>
-
-          <div class="os-body">
-            <div class="os-info-grid">
-              <div class="os-info-item">
-                <span class="os-info-label">Cliente</span>
-                <span class="os-info-val td-p">{{ nomeCliente(ordem.idCliente) }}</span>
-              </div>
-              <div class="os-info-item">
-                <span class="os-info-label">Veículo</span>
-                <span class="os-info-val">{{ dadosVeiculo(ordem.idVeiculo) }}</span>
-              </div>
-              <div class="os-info-item">
-                <span class="os-info-label">Mecânico</span>
-                <span class="os-info-val">{{ nomeMecanico(ordem.idMecanicoResponsavel) }}</span>
-              </div>
-              <div class="os-info-item os-info-full">
-                <span class="os-info-label">Problema</span>
-                <span class="os-info-val">{{ ordem.descricaoProblema }}</span>
-              </div>
-            </div>
-
-            <div class="os-sublists" *ngIf="ordem.idServicosExecutados?.length || ordem.idPecasAplicadas?.length">
-              <div class="os-sublist" *ngIf="ordem.idServicosExecutados?.length">
-                <div class="os-sublist-title">Serviços ({{ ordem.idServicosExecutados.length }})</div>
-                <ul>
-                  <li *ngFor="let id of ordem.idServicosExecutados">{{ id }}</li>
-                </ul>
-              </div>
-              <div class="os-sublist" *ngIf="ordem.idPecasAplicadas?.length">
-                <div class="os-sublist-title">Peças ({{ ordem.idPecasAplicadas.length }})</div>
-                <ul>
-                  <li *ngFor="let id of ordem.idPecasAplicadas">{{ id }}</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="os-empty" *ngIf="!ordensServico.length">Nenhuma ordem de serviço cadastrada.</div>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nº OS</th>
+            <th>Cliente</th>
+            <th>Veículo</th>
+            <th>Mecânico</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Abertura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ordem of ordensServico">
+            <td class="td-p">#{{ ordem.id.slice(0, 8) }}</td>
+            <td>{{ nomeCliente(ordem.idCliente) }}</td>
+            <td>{{ dadosVeiculo(ordem.idVeiculo) }}</td>
+            <td>{{ nomeMecanico(ordem.idMecanicoResponsavel) }}</td>
+            <td>{{ ordem.descricaoProblema }}</td>
+            <td><span [ngClass]="badgeClassStatus(ordem.statusOrdemServico)">{{ labelStatus(ordem.statusOrdemServico) }}</span></td>
+            <td>{{ ordem.dataAbertura | date:'dd/MM/yyyy' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
   </div>
 </div>
