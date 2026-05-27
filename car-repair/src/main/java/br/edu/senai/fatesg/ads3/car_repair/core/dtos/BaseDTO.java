@@ -4,6 +4,13 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 @Getter
 @Setter
 public abstract class BaseDTO {

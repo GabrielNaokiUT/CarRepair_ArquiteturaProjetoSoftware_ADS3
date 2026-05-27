@@ -1,15 +1,18 @@
 package br.edu.senai.fatesg.ads3.car_repair.core.exceptions;
 
-import java.time.LocalDateTime;
-
-
 import lombok.Getter;
 import lombok.Setter;
+
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
 
 @Getter
 @Setter
 public class ErrorResponse {
-
     private String title;
     private String message;
 

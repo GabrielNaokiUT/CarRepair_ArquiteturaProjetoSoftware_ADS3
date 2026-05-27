@@ -1,23 +1,28 @@
 package br.edu.senai.fatesg.ads3.car_repair.core.exceptions;
 
 import org.springframework.http.HttpStatus;
-
 import lombok.Getter;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 @Getter
 public class BusinessException extends BaseException {
-
     private static final long serialVersionUID = -224350778964358350L;
 
     public BusinessException(String message, HttpStatus httpStatus) {
         super(
-                "Erro de Processo de Negócio", // Título fixo para este tipo de exceção
-                message,
-                httpStatus,
-                Severity.ERROR,
-                "BUSINESS_PROCESS_ERROR"
+            "Erro de Processo de Negócio", // Título fixo para este tipo de exceção
+            message,
+            httpStatus,
+            Severity.ERROR,
+            "BUSINESS_PROCESS_ERROR"
         );
     }
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.business.clientes;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.helpers.GenericMapper;
@@ -9,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
 
 @Component
@@ -20,6 +18,7 @@ public class ClienteMapper extends GenericMapper <ClienteModel, ClienteDTO> impl
         if (entity == null) {
             return null;
         }
+        
         ClienteDTO dto = new ClienteDTO();
         dto.setId(entity.getId());
         dto.setActive(entity.isAtivo());

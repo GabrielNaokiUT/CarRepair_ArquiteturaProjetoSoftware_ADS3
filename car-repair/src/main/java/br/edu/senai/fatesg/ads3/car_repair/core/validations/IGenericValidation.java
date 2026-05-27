@@ -4,10 +4,15 @@ import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.repositories.IGenericRepository;
 import java.util.UUID;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
 
 public interface IGenericValidation<E extends BaseModel, R extends IGenericRepository<E>> {
     // Validações que ocorrem SEMPRE (Insert e Update)
-
     void validateFields(E entity);
 
     // Validações de campos específicas para NOVOS registros

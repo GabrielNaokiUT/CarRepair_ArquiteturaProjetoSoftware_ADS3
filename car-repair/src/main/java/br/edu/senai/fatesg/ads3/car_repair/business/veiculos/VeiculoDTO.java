@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.business.veiculos;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.dtos.BaseDTO;
@@ -12,14 +8,14 @@ import lombok.EqualsAndHashCode;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-
 public class VeiculoDTO extends BaseDTO {
-    
     private UUID idVeiculo;
     private String placa;
     private String marca;
@@ -27,6 +23,5 @@ public class VeiculoDTO extends BaseDTO {
     private Integer anoFabricacao;
     private String cor;
     private Integer quilometragem;
-    private UUID idCliente;
-    
+    private UUID idCliente;   
 }

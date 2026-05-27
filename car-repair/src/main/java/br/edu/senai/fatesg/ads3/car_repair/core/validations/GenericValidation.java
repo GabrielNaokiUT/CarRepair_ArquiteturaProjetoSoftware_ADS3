@@ -4,12 +4,16 @@ import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
 import br.edu.senai.fatesg.ads3.car_repair.core.exceptions.FieldValidationException;
 import br.edu.senai.fatesg.ads3.car_repair.core.repositories.IGenericRepository;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
 
 public abstract class GenericValidation<E extends BaseModel, R extends IGenericRepository<E>> implements IGenericValidation<E, R> {
-
     @Autowired
     protected R repository;
 
@@ -56,5 +60,4 @@ public abstract class GenericValidation<E extends BaseModel, R extends IGenericR
     @Override
     public void validateUpdate(E entity) {
     }
-
 }
