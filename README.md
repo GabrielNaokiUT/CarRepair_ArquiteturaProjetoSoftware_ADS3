@@ -301,7 +301,7 @@ Frontend disponível em: `http://localhost:4200`
 
 - [ ] Autenticação real com JWT + guards de rota no Angular
 - [ ] Paginação e filtros nas listagens
-- [ ] CRUD completo (edição e exclusão) para todos os domínios
+- [x] CRUD completo (edição e exclusão) para todos os domínios
 - [ ] Testes unitários por serviço e componente
 - [ ] Módulo de relatórios e indicadores
 - [ ] Catálogo de peças e estoque
