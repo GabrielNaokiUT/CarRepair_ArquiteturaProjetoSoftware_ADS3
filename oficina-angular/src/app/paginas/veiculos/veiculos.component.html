@@ -37,7 +37,9 @@
             </div>
             <div class="form-group">
               <label>Ano</label>
-              <input name="anoFabricacao" type="number" [(ngModel)]="novoVeiculo.anoFabricacao" required placeholder="Ex: 2021" />
+              <input name="anoFabricacao" type="number" [(ngModel)]="novoVeiculo.anoFabricacao" 
+                required placeholder="Ex: 2021" min="1950" max="2026"
+                (input)="limitarAno($event)" />
             </div>
             <div class="form-group">
               <label>Cor</label>

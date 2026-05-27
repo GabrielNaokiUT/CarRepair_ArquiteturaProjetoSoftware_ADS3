@@ -47,6 +47,14 @@ export class VeiculosComponent implements OnInit {
         input.value = capitalizado;
         this.novoVeiculo[campo] = capitalizado;
     }
+    
+    limitarAno(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        let value = input.value.replace(/[^0-9]/g, '');
+        if (value.length > 4) value = value.slice(0, 4);
+        input.value = value;
+        this.novoVeiculo.anoFabricacao = Number(value);
+    }
 
   constructor(
     private readonly clientesService: ClientesService,
