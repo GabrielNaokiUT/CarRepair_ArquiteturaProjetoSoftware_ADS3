@@ -19,15 +19,21 @@
           <div class="form-grid cols3">
             <div class="form-group">
               <label>Placa</label>
-              <input name="placa" [(ngModel)]="novoVeiculo.placa" required placeholder="Ex: ABC-1234" />
+              <input name="placa" [(ngModel)]="novoVeiculo.placa" required
+                placeholder="Ex: ABC-1234 ou ABC1D23"
+                (input)="aplicarMascaraPlaca($event)" />
             </div>
             <div class="form-group">
               <label>Marca</label>
-              <input name="marca" [(ngModel)]="novoVeiculo.marca" required placeholder="Ex: Toyota" />
+              <input name="marca" [(ngModel)]="novoVeiculo.marca" required
+                placeholder="Ex: Toyota"
+                (input)="capitalizarPrimeira($event, 'marca')" />
             </div>
             <div class="form-group">
               <label>Modelo</label>
-              <input name="modelo" [(ngModel)]="novoVeiculo.modelo" required placeholder="Ex: Corolla" />
+              <input name="modelo" [(ngModel)]="novoVeiculo.modelo" required
+                placeholder="Ex: Corolla"
+                (input)="capitalizarPrimeira($event, 'modelo')" />
             </div>
             <div class="form-group">
               <label>Ano</label>
@@ -35,7 +41,9 @@
             </div>
             <div class="form-group">
               <label>Cor</label>
-              <input name="cor" [(ngModel)]="novoVeiculo.cor" placeholder="Ex: Prata" />
+              <input name="cor" [(ngModel)]="novoVeiculo.cor"
+                placeholder="Ex: Prata"
+                (input)="capitalizarPrimeira($event, 'cor')" />
             </div>
             <div class="form-group">
               <label>Cliente</label>
