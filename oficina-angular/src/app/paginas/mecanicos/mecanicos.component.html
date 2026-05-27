@@ -19,11 +19,15 @@
           <div class="form-grid cols3">
             <div class="form-group">
               <label>Nome completo</label>
-              <input name="nome" [(ngModel)]="novoMecanico.nome" required minlength="3" placeholder="Ex: Carlos Souza" />
+              <input name="nome" [(ngModel)]="novoMecanico.nome" required minlength="3"
+                placeholder="Ex: Carlos Souza"
+                (input)="capitalizarNomeCompleto($event)" />
             </div>
             <div class="form-group">
               <label>CPF</label>
-              <input name="cpf" [(ngModel)]="novoMecanico.cpf" required placeholder="000.000.000-00" />
+              <input name="cpf" [(ngModel)]="novoMecanico.cpf" required
+                placeholder="000.000.000-00"
+                (input)="aplicarMascaraCpf($event)" />
             </div>
             <div class="form-group">
               <label>E-mail</label>
@@ -31,15 +35,21 @@
             </div>
             <div class="form-group">
               <label>Telefone</label>
-              <input name="telefone" [(ngModel)]="novoMecanico.telefone" required placeholder="(62) 99999-0000" />
+              <input name="telefone" [(ngModel)]="novoMecanico.telefone" required
+                placeholder="(62) 99999-0000"
+                (input)="aplicarMascaraTelefone($event)" />
             </div>
             <div class="form-group">
               <label>Especialidade</label>
-              <input name="especialidade" [(ngModel)]="novoMecanico.especialidade" required placeholder="Ex: Motor, Suspensão" />
+              <input name="especialidade" [(ngModel)]="novoMecanico.especialidade" required
+                placeholder="Ex: Motor, Suspensão"
+                (input)="capitalizarPrimeira($event)" />
             </div>
             <div class="form-group">
               <label>CREA</label>
-              <input name="crea" [(ngModel)]="novoMecanico.crea" placeholder="Ex: GO-000000" />
+              <input name="crea" [(ngModel)]="novoMecanico.crea"
+                placeholder="Ex: GO-123456"
+                (input)="aplicarMascaraCrea($event)" />
             </div>
           </div>
           <ul class="erros" *ngIf="errosFormulario.length">
