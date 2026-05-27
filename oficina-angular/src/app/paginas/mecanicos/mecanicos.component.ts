@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-
-import { validarCpfBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';
-import { Mecanico } from '../../modelos/mecanico';
+import { validarCpfBasico, validarEmailBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';import { Mecanico } from '../../modelos/mecanico';
 import { MecanicosService } from '../../services/dominios/mecanicos.service';
 import { MensagemService } from '../../shared/mensagens/mensagem.service';
 
@@ -189,6 +187,10 @@ export class MecanicosComponent implements OnInit {
 
     if (!validarCpfBasico(this.novoMecanico.cpf)) {
       erros.push('CPF inválido. Verifique os 11 dígitos e os dígitos verificadores.');
+    }
+
+    if (!validarEmailBasico(this.novoMecanico.email)) {
+        erros.push('Informe um e-mail válido (ex: nome@dominio.com).');
     }
 
     if (!this.novoMecanico.especialidade.trim()) {

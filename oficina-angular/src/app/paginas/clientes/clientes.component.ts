@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-
-import { validarCpfBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';
-import { Cliente } from '../../modelos/cliente';
+import { validarCpfBasico, validarEmailBasico, validarTelefoneBasico } from '../../core/validacoes/campos.util';import { Cliente } from '../../modelos/cliente';
 import { ClientesService } from '../../services/dominios/clientes.service';
 import { MensagemService } from '../../shared/mensagens/mensagem.service';
 
@@ -119,12 +117,26 @@ export class ClientesComponent implements OnInit {
     if (!validarCpfBasico(this.novoCliente.cpf)) {
       erros.push('CPF inválido. Verifique os 11 dígitos e os dígitos verificadores.');
     }
+    
+    if (!validarEmailBasico(this.novoCliente.email)) {
+        erros.push('Informe um e-mail válido (ex: nome@dominio.com).');
+    }
 
     if (!validarTelefoneBasico(this.novoCliente.telefone)) {
       erros.push('Informe um telefone válido com DDD.');
     }
 
     return erros;
+  }
+  
+  capitalizarNomeCompleto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const capitalizado = input.value
+      .split(' ')
+      .map(palavra => palavra.length > 0 ? palavra.charAt(0).toUpperCase() + palavra.slice(1) : '')
+      .join(' ');
+    input.value = capitalizado;
+    this.novoCliente.nome = capitalizado;
   }
   
   aplicarMascaraCpf(event: Event): void {
