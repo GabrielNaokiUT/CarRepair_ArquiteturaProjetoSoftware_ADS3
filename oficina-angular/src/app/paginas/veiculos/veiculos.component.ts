@@ -31,7 +31,7 @@ export class VeiculosComponent implements OnInit {
         if (value.length > 7) value = value.slice(0, 7);
 
         const mercosul = /^[A-Z]{3}\d[A-Z]/.test(value);
-        if (!mercosul && value.length > 3) {
+        if (!mercosul && value.length === 7) {
             value = value.slice(0, 3) + '-' + value.slice(3);
         }
 
