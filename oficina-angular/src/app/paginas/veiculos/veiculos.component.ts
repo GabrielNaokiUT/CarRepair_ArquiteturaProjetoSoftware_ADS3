@@ -25,6 +25,29 @@ export class VeiculosComponent implements OnInit {
 
   novoVeiculo: Omit<Veiculo, 'id' | 'active'> = this.criarVeiculoVazio();
 
+    aplicarMascaraPlaca(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        if (value.length > 7) value = value.slice(0, 7);
+
+        const mercosul = /^[A-Z]{3}\d[A-Z]/.test(value);
+        if (!mercosul && value.length > 3) {
+            value = value.slice(0, 3) + '-' + value.slice(3);
+        }
+
+        input.value = value;
+        this.novoVeiculo.placa = value;
+    }
+
+    capitalizarPrimeira(event: Event, campo: 'marca' | 'modelo' | 'cor'): void {
+        const input = event.target as HTMLInputElement;
+        const value = input.value;
+        if (!value) return;
+        const capitalizado = value.charAt(0).toUpperCase() + value.slice(1);
+        input.value = capitalizado;
+        this.novoVeiculo[campo] = capitalizado;
+    }
+
   constructor(
     private readonly clientesService: ClientesService,
     private readonly veiculosService: VeiculosService,
