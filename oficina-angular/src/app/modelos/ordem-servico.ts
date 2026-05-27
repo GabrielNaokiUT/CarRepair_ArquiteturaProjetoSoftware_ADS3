@@ -14,13 +14,14 @@ export interface PecaAplicada {
 
 export interface OrdemServico {
   id: string;
-  clienteId: string;
-  veiculoId: string;
-  usuarioResponsavelId: string;
-  mecanicoResponsavelId: string;
+  idCliente: string;
+  idVeiculo: string;
+  idMecanicoResponsavel: string;
+  idUsuarioResponsavel: string;
   dataAbertura: string;
-  status: StatusOrdemServico;
+  statusOrdemServico: StatusOrdemServico;
   descricaoProblema: string;
-  servicosExecutados: ServicoExecutado[];
-  pecasAplicadas: PecaAplicada[];
+  idServicosExecutados: string[];
+  idPecasAplicadas: string[];
+  active: boolean;
 }

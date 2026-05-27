@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -24,6 +25,8 @@ export class ApiBaseService {
   }
 
   protected delete(endpoint: string, id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${endpoint}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${endpoint}/${id}`, { responseType: 'text' }).pipe(
+      map(() => void 0)
+    );
   }
 }

@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { Cliente } from '../../modelos/cliente';
 import { Mecanico } from '../../modelos/mecanico';
-import { OrdemServico, PecaAplicada, ServicoExecutado } from '../../modelos/ordem-servico';
+import { OrdemServico } from '../../modelos/ordem-servico';
+import { Servico } from '../../modelos/servico';
 import { Usuario } from '../../modelos/usuario';
 import { Veiculo } from '../../modelos/veiculo';
 import { ClientesService } from '../../services/dominios/clientes.service';
 import { MecanicosService } from '../../services/dominios/mecanicos.service';
 import { OrdensServicoService } from '../../services/dominios/ordens-servico.service';
+import { ServicosService } from '../../services/dominios/servicos.service';
 import { UsuariosService } from '../../services/dominios/usuarios.service';
 import { VeiculosService } from '../../services/dominios/veiculos.service';
 import { MensagemService } from '../../shared/mensagens/mensagem.service';
@@ -26,43 +28,26 @@ export class OrdensServicoComponent implements OnInit {
   usuarios: Usuario[] = [];
   veiculos: Veiculo[] = [];
   mecanicos: Mecanico[] = [];
+  servicos: Servico[] = [];
   ordensServico: OrdemServico[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novaOrdem: Omit<OrdemServico, 'id'> = {
-    clienteId: '',
-    veiculoId: '',
-    usuarioResponsavelId: '',
-    mecanicoResponsavelId: '',
-    dataAbertura: new Date().toISOString().slice(0, 10),
-    status: 'aberta',
-    descricaoProblema: '',
-    servicosExecutados: [],
-    pecasAplicadas: []
-  };
+  novaOrdem: Omit<OrdemServico, 'id' | 'active'> = this.ordemVazia();
 
-  novoServico: ServicoExecutado = {
-    descricao: '',
-    valor: 0,
-    tempoExecucaoHoras: 0
-  };
-
-  novaPeca: PecaAplicada = {
-    descricao: '',
-    quantidade: 1,
-    valorUnitario: 0
-  };
-
-  servicosTemp: ServicoExecutado[] = [];
-  pecasTemp: PecaAplicada[] = [];
+  servicoSelecionadoId = '';
 
   constructor(
     private readonly clientesService: ClientesService,
     private readonly usuariosService: UsuariosService,
     private readonly veiculosService: VeiculosService,
     private readonly mecanicosService: MecanicosService,
+    private readonly servicosService: ServicosService,
     private readonly ordensServicoService: OrdensServicoService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -70,13 +55,16 @@ export class OrdensServicoComponent implements OnInit {
       clientes: this.clientesService.listar(),
       usuarios: this.usuariosService.listar(),
       veiculos: this.veiculosService.listar(),
-      mecanicos: this.mecanicosService.listar()
+      mecanicos: this.mecanicosService.listar(),
+      servicos: this.servicosService.listar()
     }).subscribe({
-      next: ({ clientes, usuarios, veiculos, mecanicos }) => {
+      next: ({ clientes, usuarios, veiculos, mecanicos, servicos }) => {
         this.clientes = clientes;
         this.usuarios = usuarios;
         this.veiculos = veiculos;
         this.mecanicos = mecanicos;
+        this.servicos = servicos;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar dados de apoio para ordens de serviço.');
@@ -86,32 +74,69 @@ export class OrdensServicoComponent implements OnInit {
     this.carregarOrdens();
   }
 
-  adicionarServico(): void {
-    if (!this.novoServico.descricao.trim() || this.novoServico.valor <= 0 || this.novoServico.tempoExecucaoHoras <= 0) {
-      this.mensagemService.aviso('Preencha descrição, valor e tempo do serviço antes de adicionar.');
-      return;
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novaOrdem = this.ordemVazia();
+      this.servicoSelecionadoId = '';
     }
-
-    this.servicosTemp = [...this.servicosTemp, { ...this.novoServico }];
-    this.novoServico = {
-      descricao: '',
-      valor: 0,
-      tempoExecucaoHoras: 0
-    };
   }
 
-  adicionarPeca(): void {
-    if (!this.novaPeca.descricao.trim() || this.novaPeca.quantidade <= 0 || this.novaPeca.valorUnitario <= 0) {
-      this.mensagemService.aviso('Preencha descrição, quantidade e valor unitário da peça antes de adicionar.');
+  editarOrdem(ordem: OrdemServico): void {
+    this.novaOrdem = {
+      idCliente: ordem.idCliente,
+      idVeiculo: ordem.idVeiculo,
+      idUsuarioResponsavel: ordem.idUsuarioResponsavel,
+      idMecanicoResponsavel: ordem.idMecanicoResponsavel,
+      dataAbertura: ordem.dataAbertura,
+      statusOrdemServico: ordem.statusOrdemServico,
+      descricaoProblema: ordem.descricaoProblema,
+      idServicosExecutados: [...ordem.idServicosExecutados],
+      idPecasAplicadas: [...ordem.idPecasAplicadas]
+    };
+    this.idEditando = ordem.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.servicoSelecionadoId = '';
+    this.errosFormulario = [];
+  }
+
+  excluirOrdem(id: string): void {
+    if (!window.confirm('Deseja realmente excluir esta ordem de serviço?')) return;
+    this.ordensServicoService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Ordem de serviço excluída com sucesso.');
+        this.carregarOrdens();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir a ordem de serviço.';
+        this.mensagemService.erro(msg);
+      }
+    });
+  }
+
+  adicionarServico(): void {
+    if (!this.servicoSelecionadoId) {
+      this.mensagemService.aviso('Selecione um serviço antes de adicionar.');
       return;
     }
+    if (this.novaOrdem.idServicosExecutados.includes(this.servicoSelecionadoId)) {
+      this.mensagemService.aviso('Este serviço já foi adicionado.');
+      return;
+    }
+    this.novaOrdem.idServicosExecutados = [...this.novaOrdem.idServicosExecutados, this.servicoSelecionadoId];
+    this.servicoSelecionadoId = '';
+  }
 
-    this.pecasTemp = [...this.pecasTemp, { ...this.novaPeca }];
-    this.novaPeca = {
-      descricao: '',
-      quantidade: 1,
-      valorUnitario: 0
-    };
+  nomeServico(id: string): string {
+    return this.servicos.find((s) => s.id === id)?.nome ?? id;
+  }
+
+  removerServico(id: string): void {
+    this.novaOrdem.idServicosExecutados = this.novaOrdem.idServicosExecutados.filter((s) => s !== id);
   }
 
   salvarOrdemServico(form: NgForm): void {
@@ -122,50 +147,87 @@ export class OrdensServicoComponent implements OnInit {
       return;
     }
 
-    this.ordensServicoService
-      .adicionar({
-        ...this.novaOrdem,
-        servicosExecutados: [...this.servicosTemp],
-        pecasAplicadas: [...this.pecasTemp]
-      })
-      .subscribe({
-        next: () => {
-          this.mensagemService.sucesso('Ordem de serviço cadastrada com sucesso.');
-          form.resetForm({
-            clienteId: '',
-            veiculoId: '',
-            usuarioResponsavelId: '',
-            mecanicoResponsavelId: '',
-            dataAbertura: new Date().toISOString().slice(0, 10),
-            descricaoProblema: ''
-          });
-          this.servicosTemp = [];
-          this.pecasTemp = [];
-          this.carregarOrdens();
-        },
-        error: () => {
-          this.mensagemService.erro('Não foi possível cadastrar a ordem de serviço no momento.');
-        }
-      });
+    const operacao$ = this.editando && this.idEditando
+      ? this.ordensServicoService.atualizar(this.idEditando, { ...this.novaOrdem })
+      : this.ordensServicoService.adicionar({ ...this.novaOrdem });
+
+    operacao$.subscribe({
+      next: () => {
+        this.mensagemService.sucesso(this.editando ? 'Ordem de serviço atualizada com sucesso.' : 'Ordem de serviço cadastrada com sucesso.');
+        form.resetForm({
+          idCliente: '',
+          idVeiculo: '',
+          idUsuarioResponsavel: '',
+          idMecanicoResponsavel: '',
+          dataAbertura: new Date().toISOString().slice(0, 10),
+          descricaoProblema: ''
+        });
+        this.novaOrdem = this.ordemVazia();
+        this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.servicoSelecionadoId = '';
+        this.carregarOrdens();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar a ordem de serviço no momento.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   nomeCliente(clienteId: string): string {
-    return this.clientes.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
+    return this.clientes.find((c) => c.id === clienteId)?.nome ?? clienteId;
   }
 
   nomeMecanico(mecanicoId: string): string {
-    return this.mecanicos.find((mecanico) => mecanico.id === mecanicoId)?.nome ?? 'Não informado';
+    return this.mecanicos.find((m) => m.id === mecanicoId)?.nome ?? mecanicoId;
   }
 
   dadosVeiculo(veiculoId: string): string {
-    const veiculo = this.veiculos.find((item) => item.id === veiculoId);
-    return veiculo ? `${veiculo.placa} - ${veiculo.modelo}` : 'Não informado';
+    const veiculo = this.veiculos.find((v) => v.id === veiculoId);
+    return veiculo ? veiculo.placa : veiculoId;
+  }
+
+  badgeClassStatus(status: string): Record<string, boolean> {
+    return {
+      'badge': true,
+      'b-aberta':  status === 'aberta',
+      'b-exec':    status === 'em_execucao',
+      'b-fin':     status === 'finalizada',
+      'b-cancel':  status === 'cancelada'
+    };
+  }
+
+  labelStatus(status: string): string {
+    const map: Record<string, string> = {
+      aberta: 'Aberta',
+      em_execucao: 'Em execução',
+      finalizada: 'Finalizada',
+      cancelada: 'Cancelada'
+    };
+    return map[status] ?? status;
+  }
+
+  private ordemVazia(): Omit<OrdemServico, 'id' | 'active'> {
+    return {
+      idCliente: '',
+      idVeiculo: '',
+      idUsuarioResponsavel: '',
+      idMecanicoResponsavel: '',
+      dataAbertura: new Date().toISOString().slice(0, 10),
+      statusOrdemServico: 'aberta',
+      descricaoProblema: '',
+      idServicosExecutados: [],
+      idPecasAplicadas: []
+    };
   }
 
   private carregarOrdens(): void {
     this.ordensServicoService.listar().subscribe({
       next: (ordensServico) => {
         this.ordensServico = ordensServico;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar ordens de serviço.');
@@ -176,33 +238,12 @@ export class OrdensServicoComponent implements OnInit {
   private validarFormulario(): string[] {
     const erros: string[] = [];
 
-    if (!this.novaOrdem.clienteId) {
-      erros.push('Selecione um cliente.');
-    }
-
-    if (!this.novaOrdem.veiculoId) {
-      erros.push('Selecione um veículo.');
-    }
-
-    if (!this.novaOrdem.usuarioResponsavelId) {
-      erros.push('Selecione um usuário responsável.');
-    }
-
-    if (!this.novaOrdem.mecanicoResponsavelId) {
-      erros.push('Selecione um mecânico responsável.');
-    }
-
-    if (!this.novaOrdem.dataAbertura) {
-      erros.push('Informe a data de abertura.');
-    }
-
-    if (this.novaOrdem.descricaoProblema.trim().length < 10) {
-      erros.push('Descreva o problema com ao menos 10 caracteres.');
-    }
-
-    if (!this.servicosTemp.length) {
-      erros.push('Adicione ao menos um serviço executado.');
-    }
+    if (!this.novaOrdem.idCliente) erros.push('Selecione um cliente.');
+    if (!this.novaOrdem.idVeiculo) erros.push('Selecione um veículo.');
+    if (!this.novaOrdem.idUsuarioResponsavel) erros.push('Selecione um usuário responsável.');
+    if (!this.novaOrdem.idMecanicoResponsavel) erros.push('Selecione um mecânico responsável.');
+    if (!this.novaOrdem.dataAbertura) erros.push('Informe a data de abertura.');
+    if (this.novaOrdem.descricaoProblema.trim().length < 5) erros.push('Descreva o problema com ao menos 5 caracteres.');
 
     return erros;
   }

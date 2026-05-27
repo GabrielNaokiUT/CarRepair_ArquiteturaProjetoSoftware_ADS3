@@ -1,62 +1,98 @@
-<section class="pagina">
-  <h1>Veículos</h1>
+<div class="inner-page">
+  <div class="inner-hero">
+    <div class="inner-hero-top">
+      <div>
+        <div class="inner-label">Gestão</div>
+        <div class="inner-title">Veículos</div>
+      </div>
+      <button class="btn-add" (click)="toggleForm()">
+        {{ formAberto ? '✕ Cancelar' : '+ Novo veículo' }}
+      </button>
+    </div>
+  </div>
 
-  <form #formVeiculo="ngForm" class="formulario" (ngSubmit)="salvarVeiculo(formVeiculo)">
-    <label>
-      Cliente
-      <select name="clienteId" [(ngModel)]="novoVeiculo.clienteId" required>
-        <option [ngValue]="0">Selecione</option>
-        <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
-          {{ cliente.nome }}
-        </option>
-      </select>
-    </label>
+  <div class="inner-content">
+    <div class="form-wrapper" [class.open]="formAberto">
+      <div class="form-card">
+        <div class="form-title">{{ editando ? 'Editar veículo' : 'Cadastrar veículo' }}</div>
+        <form #formVeiculo="ngForm" (ngSubmit)="salvarVeiculo(formVeiculo)">
+          <div class="form-grid cols3">
+            <div class="form-group">
+              <label>Placa</label>
+              <input name="placa" [(ngModel)]="novoVeiculo.placa" required placeholder="Ex: ABC-1234" />
+            </div>
+            <div class="form-group">
+              <label>Marca</label>
+              <input name="marca" [(ngModel)]="novoVeiculo.marca" required placeholder="Ex: Toyota" />
+            </div>
+            <div class="form-group">
+              <label>Modelo</label>
+              <input name="modelo" [(ngModel)]="novoVeiculo.modelo" required placeholder="Ex: Corolla" />
+            </div>
+            <div class="form-group">
+              <label>Ano</label>
+              <input name="anoFabricacao" type="number" [(ngModel)]="novoVeiculo.anoFabricacao" required placeholder="Ex: 2021" />
+            </div>
+            <div class="form-group">
+              <label>Cor</label>
+              <input name="cor" [(ngModel)]="novoVeiculo.cor" placeholder="Ex: Prata" />
+            </div>
+            <div class="form-group">
+              <label>Cliente</label>
+              <select name="idCliente" [(ngModel)]="novoVeiculo.idCliente" required>
+                <option value="">Selecione um cliente</option>
+                <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
+              </select>
+            </div>
+          </div>
+          <ul class="erros" *ngIf="errosFormulario.length">
+            <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+          </ul>
+          <div class="form-actions">
+            <button class="btn-save" type="submit">Salvar veículo</button>
+            <button class="btn-cancel-form" type="button" (click)="toggleForm()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-    <label>
-      Placa
-      <input name="placa" [(ngModel)]="novoVeiculo.placa" required placeholder="ABC-1234" />
-    </label>
-
-    <label>
-      Modelo
-      <input name="modelo" [(ngModel)]="novoVeiculo.modelo" required />
-    </label>
-
-    <label>
-      Marca
-      <input name="marca" [(ngModel)]="novoVeiculo.marca" required />
-    </label>
-
-    <label>
-      Ano
-      <input name="ano" type="number" [(ngModel)]="novoVeiculo.ano" required />
-    </label>
-
-    <ul class="erros" *ngIf="errosFormulario.length">
-      <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
-    </ul>
-
-    <button type="submit">Adicionar veículo</button>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Cliente</th>
-        <th>Placa</th>
-        <th>Modelo</th>
-        <th>Marca</th>
-        <th>Ano</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let veiculo of veiculos">
-        <td>{{ nomeCliente(veiculo.clienteId) }}</td>
-        <td>{{ veiculo.placa }}</td>
-        <td>{{ veiculo.modelo }}</td>
-        <td>{{ veiculo.marca }}</td>
-        <td>{{ veiculo.ano }}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <div class="table-card">
+      <div class="table-top">
+        <span class="table-count">{{ veiculos.length }} registro(s)</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Marca / Modelo</th>
+            <th>Ano</th>
+            <th>Cor</th>
+            <th>Cliente</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let veiculo of veiculos">
+            <td class="td-p">{{ veiculo.placa }}</td>
+            <td>{{ veiculo.marca }} {{ veiculo.modelo }}</td>
+            <td>{{ veiculo.anoFabricacao }}</td>
+            <td>{{ veiculo.cor }}</td>
+            <td>{{ nomeCliente(veiculo.idCliente) }}</td>
+            <td>
+              <span class="badge" [class.b-ativo]="veiculo.active" [class.b-inativo]="!veiculo.active">
+                {{ veiculo.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarVeiculo(veiculo)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirVeiculo(veiculo.id)">✕ Excluir</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

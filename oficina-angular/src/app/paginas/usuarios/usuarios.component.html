@@ -1,0 +1,90 @@
+<div class="inner-page">
+  <div class="inner-hero">
+    <div class="inner-hero-top">
+      <div>
+        <div class="inner-label">Gestão</div>
+        <div class="inner-title">Usuários</div>
+      </div>
+      <button class="btn-add" (click)="toggleForm()">
+        {{ formAberto ? '✕ Cancelar' : '+ Novo usuário' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="inner-content">
+    <div class="form-wrapper" [class.open]="formAberto">
+      <div class="form-card">
+        <div class="form-title">{{ editando ? 'Editar usuário' : 'Cadastrar usuário' }}</div>
+        <form #formUsuario="ngForm" (ngSubmit)="salvarUsuario(formUsuario)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome completo</label>
+              <input name="nome" [(ngModel)]="novoUsuario.nome" required minlength="3" placeholder="Ex: Ana Lima" />
+            </div>
+            <div class="form-group">
+              <label>Login</label>
+              <input name="login" [(ngModel)]="novoUsuario.login" required minlength="3" placeholder="Ex: ana.lima" />
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input name="email" [(ngModel)]="novoUsuario.email" required type="email" placeholder="email@exemplo.com" />
+            </div>
+            <div class="form-group">
+              <label>Perfil</label>
+              <select name="perfil" [(ngModel)]="novoUsuario.perfil" required>
+                <option value="" disabled>Selecionar perfil</option>
+                <option value="administrativo">Administrativo</option>
+                <option value="atendente">Atendente</option>
+                <option value="gestor">Gestor</option>
+              </select>
+            </div>
+          </div>
+          <ul class="erros" *ngIf="errosFormulario.length">
+            <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+          </ul>
+          <div class="form-actions">
+            <button class="btn-save" type="submit">Salvar usuário</button>
+            <button class="btn-cancel-form" type="button" (click)="toggleForm()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-top">
+        <span class="table-count">{{ usuarios.length }} registro(s)</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Login</th>
+            <th>E-mail</th>
+            <th>Perfil</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td class="td-p">{{ usuario.nome }}</td>
+            <td>{{ usuario.login }}</td>
+            <td>{{ usuario.email }}</td>
+            <td><span class="badge b-perfil">{{ usuario.perfil }}</span></td>
+            <td>
+              <span class="badge" [class.b-ativo]="usuario.active" [class.b-inativo]="!usuario.active">
+                {{ usuario.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarUsuario(usuario)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirUsuario(usuario.id)">✕ Excluir</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,82 +1,66 @@
-:host {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #111827;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --p1: #1a2744;
+  --p5: #f5f0e6;
+  --bg: #f5f0e6;
+  --bg2: #ede8db;
+  --nav-bg: #1a2744;
+  --text: #1a1a1a;
+  --muted: #6b6560;
+  --accent: #c9a86c;
+  --accent-dark: #9a7a38;
+  --border: rgba(26,39,68,0.1);
+  --surface: #ffffff;
 }
 
-.topo {
-  display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  background: #111827;
-  color: #f9fafb;
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
 }
 
-.topo h1 {
-  margin: 0;
-}
+.shell { min-height: 100vh; background: var(--bg); display: flex; flex-direction: column; }
 
-.topo p {
-  margin: 0.25rem 0 0;
-}
-
-nav {
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rem;
+  height: 64px;
+  background: var(--nav-bg);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-nav a {
-  color: #f9fafb;
+.nav-logo {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--p5);
   text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  padding: 0.35rem 0.5rem;
+  letter-spacing: -0.02em;
 }
 
-nav a.ativo {
-  border-color: #f9fafb;
+.nav-logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: 0; }
+
+.nav-links a {
+  color: rgba(245,240,230,0.55);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
 }
 
-main {
-  padding: 1rem;
-  background: #f3f4f6;
-  min-height: calc(100vh - 130px);
-}
+.nav-links a:hover { color: var(--p5); }
+.nav-links a.ativo { color: var(--p5); }
 
-.pagina {
-  background: #fff;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  border: 1px solid #d1d5db;
-}
-
-.formulario {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.formulario label {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.formulario input,
-.formulario select,
-.formulario textarea,
-.formulario button {
-  font: inherit;
-  padding: 0.5rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table th,
-table td {
-  border: 1px solid #d1d5db;
-  padding: 0.5rem;
-  text-align: left;
-}
+.conteudo { flex: 1; }

@@ -31,7 +31,7 @@ public class ClienteValidation extends GenericValidation<ClienteModel, IClienteR
             throw new FieldValidationException("cpf", "O CPF deve conter 11 dígitos numéricos.");
         }
    
-        String cpfCompleto = entity.getCep().replaceAll("[^0-9]", "");
+        String cpfCompleto = entity.getCpf().replaceAll("[^0-9]", "");
         if(cpfCompleto.chars().distinct().count() == 1){
             throw new FieldValidationException("cpf", "CPF inválido.");
         }
@@ -42,7 +42,7 @@ public class ClienteValidation extends GenericValidation<ClienteModel, IClienteR
         //Email
         if(entity.getEmail() != null && !entity.getEmail().isBlank()){
             if(!entity.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")){
-                throw new FieldValidationException("email", "O e-mail informado nãi é válido.");
+                throw new FieldValidationException("email", "O e-mail informado não é válido.");
             }
         }
      }    

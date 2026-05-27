@@ -26,6 +26,7 @@ public class VeiculoValidation extends GenericValidation<VeiculoModel, IVeiculoR
 
     @Override
     public void validateFields(VeiculoModel entity) {
+        super.validateFields(entity);
         if (entity.getPlaca() == null || entity.getPlaca().isBlank()) {
             throw new FieldValidationException("placa", "A placa do veículo é de preenchimento obrigatório.");
         }

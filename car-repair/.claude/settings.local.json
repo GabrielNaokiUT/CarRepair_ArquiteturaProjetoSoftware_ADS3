@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\User\\\\projetoArquitetura\\\\Nova pasta\\\\projetoArquitetura\\\\car-repair\\\\src\\\\main\\\\java\\\\br\\\\edu\\\\senai\\\\fatesg\\\\ads3\\\\car_repair\\\\core\\\\\" -Recurse -File | Select-Object FullName)",
+      "Bash(find \"c:/Users/User/projetoArquitetura/Nova pasta/projetoArquitetura/oficina-angular/src/app\" -type f -o -type d | sort)",
+      "Read(//c/Users/User/projetoArquitetura/Nova pasta/projetoArquitetura/oficina-angular/src/app/**)"
+    ]
+  }
+}

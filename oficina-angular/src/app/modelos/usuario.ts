@@ -4,4 +4,5 @@ export interface Usuario {
   login: string;
   email: string;
   perfil: 'administrativo' | 'atendente' | 'gestor';
+  active: boolean;
 }

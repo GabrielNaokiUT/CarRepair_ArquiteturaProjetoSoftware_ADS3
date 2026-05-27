@@ -86,6 +86,7 @@ public abstract class GenericController<
     public ResponseEntity<D> update(@PathVariable UUID id, @RequestBody D dto) {
         E entity = mapper.toEntity(dto);
         entity.setId(id); // Garante que o ID da URL seja o ID processado
+        entity.setAtivo(true);
         E updated = service.update(entity);
         return ResponseEntity.ok(mapper.toDto(updated));
     }

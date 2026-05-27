@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 
 import { validarPlacaBasica } from '../../core/validacoes/campos.util';
@@ -19,18 +19,62 @@ export class VeiculosComponent implements OnInit {
   clientes: Cliente[] = [];
   veiculos: Veiculo[] = [];
   errosFormulario: string[] = [];
+  formAberto = false;
+  editando = false;
+  idEditando: string | null = null;
 
-  novoVeiculo: Omit<Veiculo, 'id'> = this.criarVeiculoVazio();
+  novoVeiculo: Omit<Veiculo, 'id' | 'active'> = this.criarVeiculoVazio();
 
   constructor(
     private readonly clientesService: ClientesService,
     private readonly veiculosService: VeiculosService,
-    private readonly mensagemService: MensagemService
+    private readonly mensagemService: MensagemService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.carregarClientes();
     this.carregarVeiculos();
+  }
+
+  toggleForm(): void {
+    this.formAberto = !this.formAberto;
+    if (!this.formAberto) {
+      this.errosFormulario = [];
+      this.editando = false;
+      this.idEditando = null;
+      this.novoVeiculo = this.criarVeiculoVazio();
+    }
+  }
+
+  editarVeiculo(veiculo: Veiculo): void {
+    this.novoVeiculo = {
+      idCliente: veiculo.idCliente,
+      placa: veiculo.placa,
+      modelo: veiculo.modelo,
+      marca: veiculo.marca,
+      anoFabricacao: veiculo.anoFabricacao,
+      cor: veiculo.cor,
+      quilometragem: veiculo.quilometragem
+    };
+    this.idEditando = veiculo.id;
+    this.editando = true;
+    this.formAberto = true;
+    this.errosFormulario = [];
+  }
+
+  excluirVeiculo(id: string): void {
+    if (!window.confirm('Deseja realmente excluir este veículo?')) return;
+    this.veiculosService.excluir(id).subscribe({
+      next: () => {
+        this.mensagemService.sucesso('Veículo excluído com sucesso.');
+        this.carregarVeiculos();
+      },
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível excluir o veículo.';
+        this.mensagemService.erro(msg);
+      }
+    });
   }
 
   salvarVeiculo(form: NgForm): void {
@@ -41,26 +85,36 @@ export class VeiculosComponent implements OnInit {
       return;
     }
 
-    this.veiculosService.adicionar(this.novoVeiculo).subscribe({
+    const operacao$ = this.editando && this.idEditando
+      ? this.veiculosService.atualizar(this.idEditando, { ...this.novoVeiculo })
+      : this.veiculosService.adicionar({ ...this.novoVeiculo });
+
+    operacao$.subscribe({
       next: () => {
-        this.mensagemService.sucesso('Veículo salvo com sucesso.');
+        this.mensagemService.sucesso(this.editando ? 'Veículo atualizado com sucesso.' : 'Veículo salvo com sucesso.');
         form.resetForm(this.criarVeiculoVazio());
+        this.formAberto = false;
+        this.editando = false;
+        this.idEditando = null;
+        this.novoVeiculo = this.criarVeiculoVazio();
         this.carregarVeiculos();
       },
-      error: () => {
-        this.mensagemService.erro('Não foi possível salvar o veículo no momento.');
+      error: (err) => {
+        const msg: string = err?.error?.message ?? 'Não foi possível salvar o veículo no momento.';
+        this.mensagemService.erro(msg);
       }
     });
   }
 
   nomeCliente(clienteId: string): string {
-    return this.clientes.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
+    return this.clientesService.todos.find((cliente) => cliente.id === clienteId)?.nome ?? 'Não informado';
   }
 
   private carregarClientes(): void {
     this.clientesService.listar().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar clientes para o cadastro de veículo.');
@@ -72,6 +126,7 @@ export class VeiculosComponent implements OnInit {
     this.veiculosService.listar().subscribe({
       next: (veiculos) => {
         this.veiculos = veiculos;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.mensagemService.erro('Falha ao carregar veículos.');
@@ -83,7 +138,7 @@ export class VeiculosComponent implements OnInit {
     const erros: string[] = [];
     const anoAtual = new Date().getFullYear();
 
-    if (!this.novoVeiculo.clienteId) {
+    if (!this.novoVeiculo.idCliente) {
       erros.push('Selecione um cliente.');
     }
 
@@ -99,20 +154,22 @@ export class VeiculosComponent implements OnInit {
       erros.push('Informe a marca do veículo.');
     }
 
-    if (this.novoVeiculo.ano < 1950 || this.novoVeiculo.ano > anoAtual) {
+    if (this.novoVeiculo.anoFabricacao < 1950 || this.novoVeiculo.anoFabricacao > anoAtual) {
       erros.push(`Informe um ano entre 1950 e ${anoAtual}.`);
     }
 
     return erros;
   }
 
-  private criarVeiculoVazio(): Omit<Veiculo, 'id'> {
+  private criarVeiculoVazio(): Omit<Veiculo, 'id' | 'active'> {
     return {
-      clienteId: '',
+      idCliente: '',
       placa: '',
       modelo: '',
       marca: '',
-      ano: new Date().getFullYear()
+      anoFabricacao: new Date().getFullYear(),
+      cor: '',
+      quilometragem: 0
     };
   }
 }

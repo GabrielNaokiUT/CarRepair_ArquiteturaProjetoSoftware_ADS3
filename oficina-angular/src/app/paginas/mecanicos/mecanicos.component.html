@@ -1,43 +1,95 @@
-<section class="pagina">
-  <h1>Mecânicos</h1>
+<div class="inner-page">
+  <div class="inner-hero">
+    <div class="inner-hero-top">
+      <div>
+        <div class="inner-label">Gestão</div>
+        <div class="inner-title">Mecânicos</div>
+      </div>
+      <button class="btn-add" (click)="toggleForm()">
+        {{ formAberto ? '✕ Cancelar' : '+ Novo mecânico' }}
+      </button>
+    </div>
+  </div>
 
-  <form #formMecanico="ngForm" class="formulario" (ngSubmit)="salvarMecanico(formMecanico)">
-    <label>
-      Nome
-      <input name="nome" [(ngModel)]="novoMecanico.nome" required minlength="3" />
-    </label>
+  <div class="inner-content">
+    <div class="form-wrapper" [class.open]="formAberto">
+      <div class="form-card">
+        <div class="form-title">{{ editando ? 'Editar mecânico' : 'Cadastrar mecânico' }}</div>
+        <form #formMecanico="ngForm" (ngSubmit)="salvarMecanico(formMecanico)">
+          <div class="form-grid cols3">
+            <div class="form-group">
+              <label>Nome completo</label>
+              <input name="nome" [(ngModel)]="novoMecanico.nome" required minlength="3" placeholder="Ex: Carlos Souza" />
+            </div>
+            <div class="form-group">
+              <label>CPF</label>
+              <input name="cpf" [(ngModel)]="novoMecanico.cpf" required placeholder="000.000.000-00" />
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input name="email" [(ngModel)]="novoMecanico.email" type="email" placeholder="email@exemplo.com" />
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input name="telefone" [(ngModel)]="novoMecanico.telefone" required placeholder="(62) 99999-0000" />
+            </div>
+            <div class="form-group">
+              <label>Especialidade</label>
+              <input name="especialidade" [(ngModel)]="novoMecanico.especialidade" required placeholder="Ex: Motor, Suspensão" />
+            </div>
+            <div class="form-group">
+              <label>CREA</label>
+              <input name="crea" [(ngModel)]="novoMecanico.crea" placeholder="Ex: GO-000000" />
+            </div>
+          </div>
+          <ul class="erros" *ngIf="errosFormulario.length">
+            <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+          </ul>
+          <div class="form-actions">
+            <button class="btn-save" type="submit">Salvar mecânico</button>
+            <button class="btn-cancel-form" type="button" (click)="toggleForm()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-    <label>
-      Especialidade
-      <input name="especialidade" [(ngModel)]="novoMecanico.especialidade" required />
-    </label>
-
-    <label>
-      Telefone
-      <input name="telefone" [(ngModel)]="novoMecanico.telefone" required placeholder="(00) 00000-0000" />
-    </label>
-
-    <ul class="erros" *ngIf="errosFormulario.length">
-      <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
-    </ul>
-
-    <button type="submit">Adicionar mecânico</button>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Especialidade</th>
-        <th>Telefone</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let mecanico of mecanicos">
-        <td>{{ mecanico.nome }}</td>
-        <td>{{ mecanico.especialidade }}</td>
-        <td>{{ mecanico.telefone }}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <div class="table-card">
+      <div class="table-top">
+        <span class="table-count">{{ mecanicos.length }} registro(s)</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Especialidade</th>
+            <th>CREA</th>
+            <th>Telefone</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let mecanico of mecanicos">
+            <td class="td-p">{{ mecanico.nome }}</td>
+            <td>{{ mecanico.cpf }}</td>
+            <td>{{ mecanico.especialidade }}</td>
+            <td>{{ mecanico.crea }}</td>
+            <td>{{ mecanico.telefone }}</td>
+            <td>
+              <span class="badge" [class.b-ativo]="mecanico.active" [class.b-inativo]="!mecanico.active">
+                {{ mecanico.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarMecanico(mecanico)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirMecanico(mecanico.id)">✕ Excluir</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

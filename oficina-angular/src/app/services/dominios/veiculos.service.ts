@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ApiBaseService } from '../../core/http/api-base.service';
 import { Veiculo } from '../../modelos/veiculo';
@@ -19,16 +19,17 @@ export class VeiculosService extends ApiBaseService {
   }
 
   listar(): Observable<Veiculo[]> {
-    return this.get<Veiculo[]>(`${this.endpoint}/todos`).pipe(
-      tap((veiculos) => {
-        this.veiculos = [...veiculos];
-      }),
+    return this.get<any>(`${this.endpoint}/todos`).pipe(
+      map((response) => (response?.content ?? response) as Veiculo[]),
+      tap((veiculos) => { this.veiculos = [...veiculos]; }),
       catchError((err) => throwError(() => err))
     );
   }
 
-  adicionar(veiculo: Omit<Veiculo, 'id'>): Observable<Veiculo> {
-    return this.post<Veiculo, Omit<Veiculo, 'id'>>(this.endpoint, veiculo).pipe(
+  get todos(): Veiculo[] { return this.veiculos; }
+
+  adicionar(veiculo: Omit<Veiculo, 'id' | 'active'>): Observable<Veiculo> {
+    return this.post<Veiculo, Omit<Veiculo, 'id' | 'active'>>(this.endpoint, veiculo).pipe(
       tap((veiculoCriado) => {
         this.veiculos = [...this.veiculos, veiculoCriado];
       }),
@@ -36,4 +37,17 @@ export class VeiculosService extends ApiBaseService {
     );
   }
 
+  atualizar(id: string, veiculo: Omit<Veiculo, 'id' | 'active'>): Observable<Veiculo> {
+    return this.put<Veiculo, Omit<Veiculo, 'id' | 'active'>>(this.endpoint, id, veiculo).pipe(
+      tap((atualizado) => { this.veiculos = this.veiculos.map(v => v.id === id ? atualizado : v); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
+
+  excluir(id: string): Observable<void> {
+    return this.delete(this.endpoint, id).pipe(
+      tap(() => { this.veiculos = this.veiculos.filter(v => v.id !== id); }),
+      catchError((err) => throwError(() => err))
+    );
+  }
 }

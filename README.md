@@ -1,116 +1,315 @@
+# 🔧 CarRepair — Sistema de Gestão de Oficina Mecânica
 
-# Projeto Arquitetura de Software — ADS 3
+> Projeto acadêmico desenvolvido na disciplina **Arquitetura e Projeto de Software**  
+> SENAI FATESG · Análise e Desenvolvimento de Sistemas · 3º Semestre
 
-```text
- █████╗ ██████╗  ██████╗██╗  ██╗██╗████████╗███████╗████████╗██╗   ██╗██████╗  █████╗ 
-██╔══██╗██╔══██╗██╔════╝██║  ██║██║╚══██╔══╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗██╔══██╗
-███████║██████╔╝██║     ███████║██║   ██║   █████╗     ██║   ██║   ██║██████╔╝███████║
-██╔══██║██╔══██╗██║     ██╔══██║██║   ██║   ██╔══╝     ██║   ██║   ██║██╔══██╗██╔══██║
-██║  ██║██║  ██║╚██████╗██║  ██║██║   ██║   ███████╗   ██║   ╚██████╔╝██║  ██║██║  ██║
-╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+---
 
-> Implementação de Sistemas Robustos com Separação de Responsabilidades.
-```
+## 👥 Equipe
 
-## 🏗️ Arquitetura do Sistema
+| Integrante | GitHub | Responsabilidade Principal |
+|---|---|---|
+| Caio Abreu | [@Caio4breu](https://github.com/Caio4breu) | Arquitetura base, domínios Cliente e Veículo, paginação |
+| Cassiano Abreu | [@Nomscodes](https://github.com/Nomscodes) | Domínios Mecânico e Usuário (backend + frontend) |
+| Gabriel Naoki | — | Domínios Cliente e Veículo — implementação inicial |
+| Wyllian Mariano | — | Alinhamento da OrdemServico (atividade 4) |
 
-O projeto utiliza o padrão de **Arquitetura em Camadas**, garantindo que a lógica de negócio seja independente da interface e do banco de dados.
+---
 
-```text
-┌──────────────────────────────────────────────────────────────────┐
-│                           CONTROLLER                             │
-│           (Entrada de dados / Endpoints REST / View)             │
-└─────────────────────────┬────────────────────────────────────────┘
-                          │ Invoca
-                          ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                            SERVICE                               │
-│           (Lógica de Negócio / Regras / Validações)              │
-└─────────────────────────┬────────────────────────────────────────┘
-                          │ Invoca
-                          ▼
-┌─────────────────────────┴────────────────────────────────────────┐
-│                          REPOSITORY                              │
-│          (Acesso a Dados / Abstração de Persistência)            │
-└─────────────────────────┬────────────────────────────────────────┘
-                          │ Persiste
-                          ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                            MODEL                                 │
-│           (Entidades de Domínio / Objetos de Valor)              │
-└──────────────────────────────────────────────────────────────────┘
-```
+## 📋 Sobre o Sistema
 
-## 🗺️ Roadmap de Desenvolvimento
+O **CarRepair** gerencia o ciclo completo de atendimento de uma oficina mecânica:
 
-```text
-╔════════════════════════════════════════════════════════════════════════════╗
-║                       PROGRESSO DO PROJETO — ADS 3                         ║
-╠═══════════════════════════╦══════════════════════╦═════════════════════════╣
-║  FASE 1 — Estrutura       ║  FASE 2 — Lógica     ║  FASE 3 — Refinamento   ║
-╠═══════════════════════════╬══════════════════════╬═════════════════════════╣
-║ ✅ Setup Maven / Java 17 ║ ✅ CRUD de Contatos  ║  ⬜ Testes Unitários    ║
-║ ✅ Estrutura de Pastas   ║ ✅ Regras de Negócio ║  ⬜ Dockerização        ║
-║ ✅ Definição do Model    ║ 🔄 Validações        ║  ⬜ Documentação API    ║
-║ ✅ Interface Repository  ║ ⬜ Exceções Custom   ║  ⬜ Deploy CI/CD        ║
-╚═══════════════════════════╩══════════════════════╩═════════════════════════╝
-  ✅ Concluído   🔄 Em andamento   ⬜ Pendente
-```
+- Cadastro de **clientes** e seus **veículos**
+- Cadastro de **mecânicos** responsáveis pela execução técnica
+- Cadastro de **usuários** operadores do sistema
+- Abertura e acompanhamento de **Ordens de Serviço**
+- Registro de **serviços executados** e **peças aplicadas**
 
-## 📁 Estrutura de Pastas
-
-```text
-projeto-arquitetura/
-│
-├── src/
-│   ├── main/
-│   │   ├── java/com/equipe/projeto/
-│   │   │   ├── controller/      ← Portas de entrada (API/UI)
-│   │   │   ├── service/         ← Regras de negócio e validações
-│   │   │   ├── repository/      ← Persistência de dados
-│   │   │   ├── model/           ← Entidades e POJOs
-│   │   │   └── exception/       ← Erros personalizados
-│   │   │
-│   │   └── resources/           ← Configurações e SQL
-│   │
-│   └── test/                    ← Testes de integração/unidade
-│
-├── .gitignore                   ← Exclusão de arquivos temporários
-├── pom.xml                      ← Gerenciamento de dependências
-└── README.md                    ← Documentação do projeto
-```
+---
 
 ## 🛠️ Stack Tecnológica
 
-| Camada | Tecnologia | Descrição |
-| :--- | :--- | :--- |
-| **Linguagem** | Java | Versão 17 (LTS) |
-| **Build Tool** | Maven | Gerenciamento de dependências |
-| **Framework** | Spring Boot | Facilitação de infraestrutura |
-| **Banco de Dados** | H2 / MySQL | Persistência relacional |
-
-## 🚀 Como Rodar Localmente
-
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/Caio4breu/projetoArquitetura.git](https://github.com/Caio4breu/projetoArquitetura.git)
-   ```
-2. **Compile o projeto:**
-   ```bash
-   mvn clean install
-   ```
-3. **Inicie a aplicação:**
-   ```bash
-   mvn spring-boot:run
-   ```
-
-## 👥 Equipe
-* **Caio Abreu**
-* **Cassiano Abreu**
-* **Gabriel Naoki**
-* **Isaque Duarte**
-* **Wyllian Mariano**
+| Camada | Tecnologia | Versão |
+|---|---|---|
+| Backend | Java + Spring Boot | **Java 21 (LTS)** |
+| Banco de Dados | PostgreSQL | UUID, ENUM, pgcrypto |
+| Frontend | Angular + TypeScript | Angular 21 |
+| Build Backend | Maven | — |
+| Build Frontend | Angular CLI + npm | CLI 21 |
+| Redução de código | Lombok | @Data, @Getter, @Setter |
+| Testes Frontend | Vitest + JSDOM | — |
 
 ---
-*Este projeto foi desenvolvido como parte dos requisitos acadêmicos da **FATESG SENAI**.*
+
+## 🏗️ Arquitetura
+
+### Padrão de Camadas — Backend
+
+Todo domínio segue **obrigatoriamente** o mesmo fluxo:
+
 ```
+Controller → Service → Validation → Repository → Model
+Response  ← Controller ← Mapper (Model → DTO) ← Service
+```
+
+Cada camada possui:
+- Uma **interface** (prefixo `I`) que define o contrato
+- Uma **classe concreta** que implementa a lógica
+
+### Pacote `core` — Classes Genéricas
+
+| Classe / Interface | Função |
+|---|---|
+| `BaseModel` | Campos comuns: `id` (UUID), `ativo`, `dataHoraCriacao` |
+| `BaseDTO` | Campos `id` e `active` para todas as respostas da API |
+| `GenericController` | CRUD completo reutilizável por herança |
+| `GenericService` | Orquestração com hook `beforeInsert` customizável |
+| `GenericValidation` | Validações reutilizáveis por domínio |
+| `GenericMapper` | Conversão bidirecional `Model ↔ DTO` |
+| `IGenericRepository` | Estende `JpaRepository` do Spring Data |
+| `GlobalExceptionHandler` | Tratamento centralizado de erros — resposta padronizada |
+
+---
+
+## 📁 Estrutura de Pastas
+
+```
+projetoArquitetura/
+│
+├── car-repair/                          # Backend Spring Boot
+│   ├── src/main/java/.../car_repair/
+│   │   ├── business/                    # Domínios de negócio
+│   │   │   ├── clientes/
+│   │   │   │   ├── ClienteModel.java
+│   │   │   │   ├── ClienteDTO.java
+│   │   │   │   ├── IClienteRepository.java
+│   │   │   │   ├── ClienteRepository.java
+│   │   │   │   ├── IClienteService.java
+│   │   │   │   ├── ClienteService.java
+│   │   │   │   ├── IClienteValidation.java
+│   │   │   │   ├── ClienteValidation.java
+│   │   │   │   ├── IClienteMapper.java
+│   │   │   │   ├── ClienteMapper.java
+│   │   │   │   └── ClienteController.java
+│   │   │   ├── veiculos/                # mesma estrutura (11 arquivos)
+│   │   │   ├── servicos/                # mesma estrutura (11 arquivos)
+│   │   │   ├── ordens_servico/          # mesma estrutura (11 arquivos)
+│   │   │   ├── mecanicos/               # mesma estrutura (11 arquivos)
+│   │   │   └── usuarios/                # mesma estrutura (11 arquivos)
+│   │   └── core/                        # Classes genéricas reutilizáveis
+│   │       ├── BaseModel.java
+│   │       ├── BaseDTO.java
+│   │       ├── GenericController.java
+│   │       ├── IGenericController.java
+│   │       ├── GenericService.java
+│   │       ├── IGenericService.java
+│   │       ├── GenericValidation.java
+│   │       ├── IGenericValidation.java
+│   │       ├── GenericMapper.java
+│   │       ├── IGenericMapper.java
+│   │       ├── IGenericRepository.java
+│   │       ├── GlobalExceptionHandler.java
+│   │       ├── ErrorResponse.java
+│   │       └── CorsConfig.java
+│   ├── src/main/resources/
+│   │   └── application.properties
+│   ├── .env                             # Variáveis de ambiente (não versionar)
+│   └── pom.xml
+│
+└── oficina-angular/                     # Frontend Angular
+    └── src/app/
+        ├── core/
+        │   ├── http/                    # ApiBaseService + HttpErrorInterceptor
+        │   └── validacoes/              # Validações reutilizáveis
+        ├── modelos/                     # Interfaces TypeScript por domínio
+        │   ├── cliente.ts
+        │   ├── veiculo.ts
+        │   ├── mecanico.ts
+        │   ├── usuario.ts
+        │   └── ordem-servico.ts
+        ├── paginas/                     # Componentes de tela (standalone)
+        │   ├── clientes/
+        │   ├── veiculos/
+        │   ├── mecanicos/
+        │   ├── ordens-servico/
+        │   ├── usuarios/
+        │   └── dashboard/
+        ├── services/dominios/           # Services REST por domínio
+        ├── shared/mensagens/            # MensagemService + MensagensComponent
+        └── app.routes.ts
+```
+
+---
+
+## 🌐 Domínios Implementados
+
+| Domínio | Endpoint | Backend | Frontend |
+|---|---|---|---|
+| Cliente | `/clientes` | ✅ | ✅ |
+| Veículo | `/veiculos` | ✅ | ✅ |
+| Serviço | `/servicos` | ✅ | ✅ |
+| Ordem de Serviço | `/ordens-servico` | ✅ | ✅ |
+| Mecânico | `/mecanicos` | ✅ | ✅ |
+| Usuário | `/usuarios` | ✅ | ✅ |
+
+---
+
+## 🗄️ Banco de Dados
+
+### Tecnologia
+- PostgreSQL com extensão `pgcrypto`
+- Chave primária **UUID** (`gen_random_uuid()`)
+- **ENUM** para status da Ordem de Serviço
+- **TIMESTAMPTZ** para campos de auditoria temporal
+
+### Tabelas
+
+| Tabela | Descrição |
+|---|---|
+| `usuarios` | Operadores do sistema (login, perfil, senha_hash) |
+| `clientes` | Proprietários dos veículos |
+| `veiculos` | Automóveis vinculados a clientes |
+| `mecanicos` | Profissionais técnicos da oficina |
+| `ordens_servico` | Tabela central — vincula cliente, veículo, usuário e mecânico |
+| `ordem_servico_servicos` | Itens de mão de obra executados na OS |
+| `ordem_servico_pecas_aplicadas` | Itens de peças utilizadas na OS |
+
+### ENUM de Status da OS
+
+```sql
+CREATE TYPE status_ordem_servico AS ENUM (
+  'aberta',
+  'em_execucao',
+  'finalizada',
+  'cancelada'
+);
+```
+
+### Relacionamentos
+
+```
+clientes       1:N → veiculos
+clientes       1:N → ordens_servico
+usuarios       1:N → ordens_servico
+mecanicos      1:N → ordens_servico
+veiculos       1:N → ordens_servico
+ordens_servico 1:N → ordem_servico_servicos
+ordens_servico 1:N → ordem_servico_pecas_aplicadas
+```
+
+---
+
+## ⚙️ Como Rodar o Projeto
+
+### Pré-requisitos
+
+- Java 21 (LTS)
+- Maven
+- Node.js + Angular CLI 21
+- PostgreSQL 17
+
+---
+
+### 1. Clonar o repositório
+
+```bash
+git clone https://github.com/Caio4breu/projetoArquitetura
+cd projetoArquitetura
+```
+
+---
+
+### 2. Configurar o banco de dados
+
+Crie o banco no PostgreSQL:
+
+```sql
+CREATE DATABASE car_repair;
+```
+
+---
+
+### 3. Configurar variáveis de ambiente (Backend)
+
+Na pasta `car-repair/`, crie um arquivo `.env` com base no exemplo abaixo:
+
+```env
+# .env.example — copie para .env e preencha com seus dados
+
+DB_NAME=car_repair
+DB_USERNAME=postgres
+DB_PASSWORD=sua_senha_aqui
+```
+
+> ⚠️ O arquivo `.env` **não deve ser versionado**. Adicione ao `.gitignore`.
+
+---
+
+### 4. Rodar o Backend
+
+```bash
+cd car-repair
+mvn clean install
+mvn spring-boot:run
+```
+
+API disponível em: `http://localhost:9081`
+
+---
+
+### 5. Rodar o Frontend
+
+```bash
+cd oficina-angular
+npm install
+npm start
+```
+
+Frontend disponível em: `http://localhost:4200`
+
+> **Observação:** Quando o backend não está rodando, os erros capturados pelo `HttpErrorInterceptor` exibem mensagens amigáveis no frontend — comportamento esperado.
+
+---
+
+## 🗂️ Documentação Arquitetural
+
+| Documento | Status | Conteúdo |
+|---|---|---|
+| [DAS v4.0](./docs/DAS_CarRepair_v4_0.docx) | Em vigor | Visão geral, stack, camadas, domínios, banco |
+| [ADR-001](./docs/ADR-001_CarRepair.docx) | Em vigor | Definição da stack e arquitetura base |
+| [ADR-002](./docs/ADR-002_CarRepair.docx) | Em vigor | BaseModel e Spring Data JPA |
+| [ADR-003](./docs/ADR-003_CarRepair.docx) | Em vigor | Generics, mappers e tratamento global de exceções |
+| [ADR-004](./docs/ADR-004_CarRepair.docx) | Em vigor | Implementação dos domínios Mecânico e Usuário |
+
+---
+
+## 📌 Tratamento de Erros — Frontend
+
+| Status HTTP | Mensagem exibida |
+|---|---|
+| `0` | Falha de rede — verifique sua conexão |
+| `400` | Dados inválidos — usa mensagem do backend |
+| `401` | Sessão expirada |
+| `403` | Acesso negado |
+| `404` | Recurso não encontrado |
+| `5xx` | Erro interno do servidor |
+
+---
+
+## 🔮 Melhorias Futuras
+
+- [ ] Autenticação real com JWT + guards de rota no Angular
+- [ ] Paginação e filtros nas listagens
+- [ ] CRUD completo (edição e exclusão) para todos os domínios
+- [ ] Testes unitários por serviço e componente
+- [ ] Módulo de relatórios e indicadores
+- [ ] Catálogo de peças e estoque
+- [ ] Histórico de manutenção por veículo
+- [ ] Melhoria da UI (HTML/CSS mais elaborado)
+
+---
+
+## 📄 Licença
+
+Projeto acadêmico — SENAI FATESG · Goiânia, GO · 2025

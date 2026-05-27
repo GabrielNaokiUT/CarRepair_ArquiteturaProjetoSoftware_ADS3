@@ -1,43 +1,85 @@
-<section class="pagina">
-  <h1>Clientes</h1>
+<div class="inner-page">
+  <div class="inner-hero">
+    <div class="inner-hero-top">
+      <div>
+        <div class="inner-label">Gestão</div>
+        <div class="inner-title">Clientes</div>
+      </div>
+      <button class="btn-add" (click)="toggleForm()">
+        {{ formAberto ? '✕ Cancelar' : '+ Novo cliente' }}
+      </button>
+    </div>
+  </div>
 
-  <form #formCliente="ngForm" class="formulario" (ngSubmit)="salvarCliente(formCliente)">
-    <label>
-      Nome
-      <input name="nome" [(ngModel)]="novoCliente.nome" required minlength="3" />
-    </label>
+  <div class="inner-content">
+    <div class="form-wrapper" [class.open]="formAberto">
+      <div class="form-card">
+        <div class="form-title">{{ editando ? 'Editar cliente' : 'Cadastrar cliente' }}</div>
+        <form #formCliente="ngForm" (ngSubmit)="salvarCliente(formCliente)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nome completo</label>
+              <input name="nome" [(ngModel)]="novoCliente.nome" required minlength="3" placeholder="Ex: João da Silva" />
+            </div>
+            <div class="form-group">
+              <label>CPF</label>
+              <input name="cpf" [(ngModel)]="novoCliente.cpf" required placeholder="000.000.000-00" />
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input name="email" [(ngModel)]="novoCliente.email" type="email" placeholder="email@exemplo.com" />
+            </div>
+            <div class="form-group">
+              <label>Telefone</label>
+              <input name="telefone" [(ngModel)]="novoCliente.telefone" required placeholder="(62) 99999-0000" />
+            </div>
+          </div>
+          <ul class="erros" *ngIf="errosFormulario.length">
+            <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
+          </ul>
+          <div class="form-actions">
+            <button class="btn-save" type="submit">Salvar cliente</button>
+            <button class="btn-cancel-form" type="button" (click)="toggleForm()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-    <label>
-      CPF
-      <input name="cpf" [(ngModel)]="novoCliente.cpf" required placeholder="Somente números" />
-    </label>
-
-    <label>
-      Telefone
-      <input name="telefone" [(ngModel)]="novoCliente.telefone" required placeholder="(00) 00000-0000" />
-    </label>
-
-    <ul class="erros" *ngIf="errosFormulario.length">
-      <li *ngFor="let erro of errosFormulario">{{ erro }}</li>
-    </ul>
-
-    <button type="submit">Adicionar cliente</button>
-  </form>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>CPF</th>
-        <th>Telefone</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let cliente of clientes">
-        <td>{{ cliente.nome }}</td>
-        <td>{{ cliente.cpf }}</td>
-        <td>{{ cliente.telefone }}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+    <div class="table-card">
+      <div class="table-top">
+        <span class="table-count">{{ clientes.length }} registro(s)</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cliente of clientes">
+            <td class="td-p">{{ cliente.nome }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefone }}</td>
+            <td>
+              <span class="badge" [class.b-ativo]="cliente.active" [class.b-inativo]="!cliente.active">
+                {{ cliente.active ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td>
+              <div class="td-acoes">
+                <button class="btn-edit" type="button" (click)="editarCliente(cliente)">✏ Editar</button>
+                <button class="btn-delete" type="button" (click)="excluirCliente(cliente.id)">✕ Excluir</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
