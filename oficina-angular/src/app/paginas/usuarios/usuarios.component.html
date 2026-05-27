@@ -19,7 +19,9 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Nome completo</label>
-              <input name="nome" [(ngModel)]="novoUsuario.nome" required minlength="3" placeholder="Ex: Ana Lima" />
+              <input name="nome" [(ngModel)]="novoUsuario.nome" required minlength="3"
+                placeholder="Ex: Ana Lima"
+                (input)="capitalizarNomeCompleto($event)" />
             </div>
             <div class="form-group">
               <label>Login</label>

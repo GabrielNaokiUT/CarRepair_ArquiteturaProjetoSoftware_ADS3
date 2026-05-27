@@ -21,6 +21,16 @@ export class UsuariosComponent implements OnInit {
 
   novoUsuario: Omit<Usuario, 'id' | 'active'> = this.usuarioVazio();
 
+  capitalizarNomeCompleto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const capitalizado = input.value
+      .split(' ')
+      .map(palavra => palavra.length > 0 ? palavra.charAt(0).toUpperCase() + palavra.slice(1) : '')
+      .join(' ');
+    input.value = capitalizado;
+    this.novoUsuario.nome = capitalizado;
+  }
+
   constructor(
     private readonly usuariosService: UsuariosService,
     private readonly mensagemService: MensagemService,
@@ -119,8 +129,8 @@ export class UsuariosComponent implements OnInit {
       erros.push('Informe o login do usuário.');
     }
 
-    if (!this.novoUsuario.email.trim() || !this.novoUsuario.email.includes('@')) {
-      erros.push('Informe um e-mail válido.');
+    if (!this.novoUsuario.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(this.novoUsuario.email)) {
+      erros.push('Informe um e-mail válido (ex: nome@dominio.com).');
     }
 
     if (!this.novoUsuario.perfil) {
