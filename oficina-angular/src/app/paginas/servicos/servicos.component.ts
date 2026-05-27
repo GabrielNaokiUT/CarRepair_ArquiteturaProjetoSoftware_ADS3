@@ -21,6 +21,15 @@ export class ServicosComponent implements OnInit {
 
   novoServico: Omit<Servico, 'id' | 'active'> = this.servicoVazio();
 
+    capitalizarPrimeira(event: Event, campo: 'nome' | 'descricao'): void {
+      const input = event.target as HTMLInputElement;
+      const value = input.value;
+      if (!value) return;
+      const capitalizado = value.charAt(0).toUpperCase() + value.slice(1);
+      input.value = capitalizado;
+      this.novoServico[campo] = capitalizado;
+    }
+
   constructor(
     private readonly servicosService: ServicosService,
     private readonly mensagemService: MensagemService,
