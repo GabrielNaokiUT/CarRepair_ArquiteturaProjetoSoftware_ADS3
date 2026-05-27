@@ -29,7 +29,18 @@ public class VeiculoValidation extends GenericValidation
         if (entity.getPlaca() == null || entity.getPlaca().isBlank()) {
             throw new FieldValidationException("placa", "A placa do veículo é de preenchimento obrigatório.");
         }
-
+        
+        String placaNormalizada = entity.getPlaca().replace("-", "").toUpperCase().trim();
+        
+        boolean placaCinza     = placaNormalizada.matches("[A-Z]{3}[0-9]{4}");
+        boolean placaMercosul  = placaNormalizada.matches("[A-Z]{3}[0-9][A-Z][0-9]{2}");
+        
+        if (!placaCinza && !placaMercosul) {
+            throw new FieldValidationException("placa", "Formato de placa inválido. Use o padrão antigo (ABC1234) ou Mercosul (ABC1D23).");
+        }
+        
+        entity.setPlaca(placaNormalizada);
+        
         if (entity.getMarca() == null || entity.getMarca().isBlank()) {
             throw new FieldValidationException("marca", "A marca do veículo é de preenchimento obrigatório.");
         }
