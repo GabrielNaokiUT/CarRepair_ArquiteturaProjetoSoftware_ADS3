@@ -38,6 +38,16 @@ export class OrdensServicoComponent implements OnInit {
   novaOrdem: Omit<OrdemServico, 'id' | 'active'> = this.ordemVazia();
 
   servicoSelecionadoId = '';
+  
+  get veiculosDoCliente(): Veiculo[] {
+    if (!this.novaOrdem.idCliente) return [];
+    return this.veiculos.filter(v => v.idCliente === this.novaOrdem.idCliente);
+  }
+
+  onClienteChange(): void {
+    this.novaOrdem.idVeiculo = '';
+  }
+
 
   constructor(
     private readonly clientesService: ClientesService,

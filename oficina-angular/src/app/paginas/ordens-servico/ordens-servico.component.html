@@ -18,18 +18,20 @@
         <form #formOs="ngForm" (ngSubmit)="salvarOrdemServico(formOs)">
           <div class="form-grid form-grid-2">
             <div class="form-group">
-              <label>Cliente</label>
-              <select name="idCliente" [(ngModel)]="novaOrdem.idCliente" required>
-                <option value="">Selecione</option>
-                <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
-              </select>
+                <label>Cliente</label>
+                <select name="idCliente" [(ngModel)]="novaOrdem.idCliente" required
+                        (change)="onClienteChange()">
+                    <option value="">Selecione</option>
+                    <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
+                </select>
             </div>
             <div class="form-group">
-              <label>Veículo</label>
-              <select name="idVeiculo" [(ngModel)]="novaOrdem.idVeiculo" required>
-                <option value="">Selecione</option>
-                <option *ngFor="let veiculo of veiculos" [value]="veiculo.id">{{ veiculo.placa }} — {{ veiculo.modelo }}</option>
-              </select>
+                <label>Veículo</label>
+                <select name="idVeiculo" [(ngModel)]="novaOrdem.idVeiculo" required
+                        [disabled]="!novaOrdem.idCliente">
+                    <option value="">Selecione</option>
+                    <option *ngFor="let veiculo of veiculosDoCliente" [value]="veiculo.id">{{ veiculo.placa }} — {{ veiculo.modelo }}</option>
+                </select>
             </div>
             <div class="form-group">
               <label>Mecânico responsável</label>
