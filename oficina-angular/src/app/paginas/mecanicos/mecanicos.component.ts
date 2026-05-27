@@ -22,6 +22,70 @@ export class MecanicosComponent implements OnInit {
 
   novoMecanico: Omit<Mecanico, 'id' | 'active'> = this.mecanicoVazio();
 
+    capitalizarNomeCompleto(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      const capitalizado = input.value
+        .split(' ')
+        .map(palavra => palavra.length > 0 ? palavra.charAt(0).toUpperCase() + palavra.slice(1) : '')
+        .join(' ');
+      input.value = capitalizado;
+      this.novoMecanico.nome = capitalizado;
+    }
+
+    aplicarMascaraCpf(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      let value = input.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      input.value = value;
+      this.novoMecanico.cpf = value;
+    }
+
+    aplicarMascaraTelefone(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      let value = input.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+      value = value
+        .replace(/(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+      input.value = value;
+      this.novoMecanico.telefone = value;
+    }
+
+    capitalizarPrimeira(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      const value = input.value;
+      if (!value) return;
+      const capitalizado = value.charAt(0).toUpperCase() + value.slice(1);
+      input.value = capitalizado;
+      this.novoMecanico.especialidade = capitalizado;
+    }
+
+    aplicarMascaraCrea(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        let value = input.value.toUpperCase();
+
+        value = value.replace(/[^A-Z0-9/-]/g, '');
+
+        const letras = value.replace(/[^A-Z]/g, '').slice(0, 2);
+        const numeros = value.replace(/[^0-9]/g, '').slice(0, 6);
+        const tipo = value.includes('/') ? value.split('/')[1].replace(/[^A-Z]/g, '').slice(0, 1) : '';
+
+        if (numeros.length > 0 && tipo.length > 0) {
+          value = `${letras}-${numeros}/${tipo}`;
+        } else if (numeros.length > 0) {
+          value = `${letras}-${numeros}`;
+        } else {
+          value = letras;
+        }
+
+        input.value = value;
+        this.novoMecanico.crea = value;
+      }
+
   constructor(
     private readonly mecanicosService: MecanicosService,
     private readonly mensagemService: MensagemService,
