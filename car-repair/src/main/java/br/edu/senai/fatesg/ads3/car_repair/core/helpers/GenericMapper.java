@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.core.helpers;
 
 import br.edu.senai.fatesg.ads3.car_repair.core.domains.BaseModel;
@@ -12,7 +8,9 @@ import org.springframework.data.domain.Page;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  * @param <E>
  * @param <D>
  */

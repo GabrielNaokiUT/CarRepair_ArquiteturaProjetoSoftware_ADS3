@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.core.domains;
 
 import jakarta.persistence.Column;
@@ -18,12 +14,14 @@ import lombok.Data;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
+
 @Data
 @MappedSuperclass
 public abstract class BaseModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", insertable = false, updatable = false)

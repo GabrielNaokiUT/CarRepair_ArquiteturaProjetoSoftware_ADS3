@@ -18,11 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
 
-
 public abstract class GenericService<E extends BaseModel, R extends IGenericRepository<E>, V extends IGenericValidation<E, R>>
-        implements IGenericService<E, R, V> {
+    implements IGenericService<E, R, V> {
 
     @Autowired
     protected R repository;
@@ -172,7 +173,5 @@ public abstract class GenericService<E extends BaseModel, R extends IGenericRepo
     ;
 
 	protected void afterDelete(E entity) {
-    }
-;
-
+    };
 }

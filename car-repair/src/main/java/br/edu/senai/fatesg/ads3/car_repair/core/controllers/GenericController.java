@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * S: Service especializado
  * M: Mapper especializado
  * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  * @param <E>
  * @param <D>
  * @param <S>
@@ -96,5 +98,4 @@ public abstract class GenericController<
         service.delete(id);
         return ResponseEntity.ok("Registro removido com sucesso.");
     }
-
 }

@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 @Component
 public class OrdemServicoMapper extends GenericMapper<OrdemServicoModel, OrdemServicoDTO> implements IOrdemServicoMapper {
 

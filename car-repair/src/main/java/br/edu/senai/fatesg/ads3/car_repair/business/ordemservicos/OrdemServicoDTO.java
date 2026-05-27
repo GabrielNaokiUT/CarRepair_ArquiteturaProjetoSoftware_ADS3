@@ -8,10 +8,16 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OrdemServicoDTO extends BaseDTO {
-
     private String descricaoProblema;
     private OrdemServicoModel.StatusOrdemServico statusOrdemServico;
     private BigDecimal valorTotal;

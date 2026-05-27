@@ -12,6 +12,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 /**
  *
  * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  * @param <E>
  */
 

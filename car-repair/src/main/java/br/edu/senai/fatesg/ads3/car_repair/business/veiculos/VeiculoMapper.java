@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.edu.senai.fatesg.ads3.car_repair.business.veiculos;
 
 import br.edu.senai.fatesg.ads3.car_repair.business.clientes.ClienteModel;
@@ -10,11 +6,14 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
 
 @Component
-public class VeiculoMapper extends GenericMapper<VeiculoModel, VeiculoDTO> implements IVeiculoMapper {
+public class VeiculoMapper extends GenericMapper
+        <VeiculoModel, VeiculoDTO> implements IVeiculoMapper {
 
     @Override
     public VeiculoDTO toDto(VeiculoModel entity) {

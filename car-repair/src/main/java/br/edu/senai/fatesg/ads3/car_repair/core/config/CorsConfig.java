@@ -6,13 +6,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  *
- * @author Gabriel
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
  */
 
 @Configuration
 
 public class CorsConfig implements WebMvcConfigurer {
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

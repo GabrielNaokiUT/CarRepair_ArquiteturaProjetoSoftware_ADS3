@@ -1,3 +1,10 @@
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';

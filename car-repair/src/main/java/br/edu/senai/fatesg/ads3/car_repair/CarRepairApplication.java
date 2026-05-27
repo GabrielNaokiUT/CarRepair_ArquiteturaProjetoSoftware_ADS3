@@ -3,11 +3,17 @@ package br.edu.senai.fatesg.ads3.car_repair;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ *
+ * @author Caio4breu
+ * @author Nomscodes
+ * @author GabrielNaokiUT
+ */
+
 @SpringBootApplication
 public class CarRepairApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarRepairApplication.class, args);
 	}
-
 }
