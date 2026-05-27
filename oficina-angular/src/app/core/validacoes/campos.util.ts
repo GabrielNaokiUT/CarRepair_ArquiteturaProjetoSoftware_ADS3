@@ -28,3 +28,8 @@ export function validarPlacaBasica(placa: string): boolean {
   const placaNormalizada = placa.trim().toUpperCase();
   return /^[A-Z]{3}-?\d[A-Z0-9]\d{2}$/.test(placaNormalizada);
 }
+
+export function validarEmailBasico(email: string): boolean {
+  if (!email) return true; // email é opcional, só valida se preenchido
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+}
