@@ -11,7 +11,7 @@
 |---|---|---|
 | Caio Abreu | [@Caio4breu](https://github.com/Caio4breu) | Arquitetura base, domínios Cliente e Veículo, paginação |
 | Cassiano Abreu | [@Nomscodes](https://github.com/Nomscodes) | Domínios Mecânico e Usuário (backend + frontend) |
-| Gabriel Naoki | — | Domínios Cliente e Veículo — implementação inicial |
+| Gabriel Naoki | [@GabrielNaokiUT](https://github.com/GabrielNaokiUT) | Arquitetura base, domínios Cliente, Veículo, Serviço e OS |
 | Wyllian Mariano | — | Alinhamento da OrdemServico (atividade 4) |
 
 ---
