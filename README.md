@@ -7,12 +7,11 @@
 
 ## 👥 Equipe
 
-| Integrante | GitHub | Responsabilidade Principal |
-|---|---|---|
-| Caio Abreu | [@Caio4breu](https://github.com/Caio4breu) | Arquitetura base, domínios Cliente e Veículo, paginação |
-| Cassiano Abreu | [@Nomscodes](https://github.com/Nomscodes) | Domínios Mecânico e Usuário (backend + frontend) |
-| Gabriel Naoki | [@GabrielNaokiUT](https://github.com/GabrielNaokiUT) | Arquitetura base, domínios Cliente, Veículo, Serviço e OS |
-| Wyllian Mariano | — | Alinhamento da OrdemServico (atividade 4) |
+| Integrante | GitHub | 
+|---|---|
+| Caio Abreu | [@Caio4breu](https://github.com/Caio4breu) | 
+| Cassiano Abreu | [@Nomscodes](https://github.com/Nomscodes) | 
+| Gabriel Naoki | [@GabrielNaokiUT](https://github.com/GabrielNaokiUT) |
 
 ---
 
@@ -294,19 +293,6 @@ Frontend disponível em: `http://localhost:4200`
 | `403` | Acesso negado |
 | `404` | Recurso não encontrado |
 | `5xx` | Erro interno do servidor |
-
----
-
-## 🔮 Melhorias Futuras
-
-- [ ] Autenticação real com JWT + guards de rota no Angular
-- [ ] Paginação e filtros nas listagens
-- [x] CRUD completo (edição e exclusão) para todos os domínios
-- [ ] Testes unitários por serviço e componente
-- [ ] Módulo de relatórios e indicadores
-- [ ] Catálogo de peças e estoque
-- [ ] Histórico de manutenção por veículo
-- [ ] Melhoria da UI (HTML/CSS mais elaborado)
 
 ---
 
